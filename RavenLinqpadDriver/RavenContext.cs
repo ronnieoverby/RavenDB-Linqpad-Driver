@@ -15,7 +15,7 @@ namespace RavenLinqpadDriver
     {
         public DocumentStore DocStore { get; private set; }
         public IDocumentSession Session { get; private set; }
-        public TextWriter LogWriter { get; set; }
+        internal TextWriter LogWriter { get; set; }
 
         public RavenContext(RavenConnectionInfo connInfo)
         {
