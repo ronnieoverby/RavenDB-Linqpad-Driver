@@ -18,7 +18,9 @@ namespace RavenLinqpadDriver
         public override string GetConnectionDescription(IConnectionInfo cxInfo)
         {
             var connInfo = RavenConnectionInfo.Load(cxInfo);
-            return string.Format("{0} (RavenDB)", connInfo.Name);
+            return connInfo.DefaultDatabase.IsNullOrWhitespace()
+            ? string.Format("RavenDB: {0}", connInfo.Url)
+            : string.Format("RavenDB: {0} ({1})", connInfo.Url, connInfo.DefaultDatabase);
         }
 
         public override string Name

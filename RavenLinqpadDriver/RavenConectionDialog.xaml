@@ -3,14 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:RavenLinqpadDriver"
              mc:Ignorable="d" Title="RavenDB Connection" Height="275" Width="466">
+
+    <Window.Resources>
+        <local:GuidValueConverter x:Key="guidConverter"/>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+        
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -18,19 +24,18 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="281*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock Name="textBlock1" Text="Name *" Margin="6" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Name="txtName" Margin="6" />
-        <TextBlock Name="textBlock999" Grid.Row="1" Text="URL *" Margin="6" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Name="txtUrl" Margin="6" Grid.Row="1" />
-        <TextBox Grid.Column="1" Grid.Row="2" Name="txtDatabase" Margin="6" />
-        <TextBox Grid.Column="1" Grid.Row="3" Name="txtResourceManagerId" Margin="6" />
-        <TextBox Grid.Column="1" Grid.Row="4" Name="txtUsername" Margin="6" />
-        <PasswordBox Grid.Column="1" Grid.Row="5" Name="txtPassword" Margin="6" />
-        <TextBlock Grid.Row="2" Name="textBlock2" Text="Database" Margin="6" VerticalAlignment="Center" />
-        <TextBlock Grid.Row="3" Name="textBlock3" Text="Resource Manager Id" Margin="6" VerticalAlignment="Center" />
-        <TextBlock Grid.Row="4" Name="textBlock4" Text="Username" Margin="6" VerticalAlignment="Center" />
-        <TextBlock Grid.Row="5" Name="textBlock5" Text="Password" Margin="6" VerticalAlignment="Center" />
-        <Button Content="OK" Grid.Column="1" Grid.Row="7" Name="btnOK" HorizontalAlignment="Right" Margin="6" Width="60" Click="btnOK_Click" />
+        </Grid.ColumnDefinitions>       
+        
+        <TextBlock  Grid.Row="0" Text="URL *" Margin="6" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Name="txtUrl" Margin="6" Grid.Row="0" Text="{Binding Url, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Grid.Column="1" Grid.Row="1" Name="txtDatabase" Margin="6" Text="{Binding DefaultDatabase, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True}" />
+        <TextBox Grid.Column="1" Grid.Row="2" Name="txtResourceManagerId" Margin="6" Text="{Binding ResourceManagerId,Converter={StaticResource guidConverter}, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True}" />
+        <TextBox Grid.Column="1" Grid.Row="3" Name="txtUsername" Margin="6" Text="{Binding Username, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True}" />
+        <PasswordBox Grid.Column="1" Grid.Row="4" Name="txtPassword" Margin="6" PasswordChanged="txtPassword_PasswordChanged" />
+        <TextBlock Grid.Row="1"  Text="Database" Margin="6" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="2" Text="Resource Manager Id" Margin="6" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="3"  Text="Username" Margin="6" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="4"  Text="Password" Margin="6" VerticalAlignment="Center" />
+        <Button Content="OK" Grid.Column="1" Grid.Row="6" Name="btnOK" HorizontalAlignment="Right" Margin="6" Width="60" Click="btnOK_Click" Command="{Binding SaveCommand}" />
     </Grid>
 </Window>
