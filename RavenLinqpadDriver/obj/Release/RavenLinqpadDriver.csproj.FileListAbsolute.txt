@@ -1,0 +1,5 @@
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver\obj\Release\ResolveAssemblyReference.cache
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver\obj\Release\RavenConectionDialog.g.cs
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver\obj\Release\GeneratedInternalTypeHelper.g.cs
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver\obj\Release\RavenLinqpadDriver_MarkupCompile.cache
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver\obj\Release\RavenLinqpadDriver_MarkupCompile.lref

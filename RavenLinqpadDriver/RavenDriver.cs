@@ -6,8 +6,6 @@ using LINQPad.Extensibility.DataContext;
 
 namespace RavenLinqpadDriver
 {
-    public class Dummy { }
-
     public class RavenDriver : StaticDataContextDriver
     {
         public override string Author
