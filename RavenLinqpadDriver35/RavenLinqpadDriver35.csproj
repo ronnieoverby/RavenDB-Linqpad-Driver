@@ -116,6 +116,7 @@
   <ItemGroup>
     <Content Include="..\RavenLinqpadDriver\header.xml">
       <Link>header.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
