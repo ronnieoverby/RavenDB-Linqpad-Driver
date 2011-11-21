@@ -80,6 +80,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyVersion.cs" />
     <Compile Include="GuidValueConverter.cs" />
     <Compile Include="RavenDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

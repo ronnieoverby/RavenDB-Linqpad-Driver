@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="LINQPad">
       <HintPath>..\lib\LINQPad.exe</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json.Net35">
       <HintPath>..\lib\Newtonsoft.Json.Net35.dll</HintPath>
@@ -77,6 +78,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\RavenLinqpadDriver\AssemblyVersion.cs">
+      <Link>AssemblyVersion.cs</Link>
+    </Compile>
     <Compile Include="..\RavenLinqpadDriver\GuidValueConverter.cs">
       <Link>GuidValueConverter.cs</Link>
     </Compile>
