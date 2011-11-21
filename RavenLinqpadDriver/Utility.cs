@@ -9,8 +9,7 @@ namespace RavenLinqpadDriver
     {
         public static bool IsNullOrWhitespace(this string source)
         {
-            return source == null || source.Trim() == string.Empty;
-            
+            return source == null || source.Trim() == string.Empty;            
         }
     }
 }

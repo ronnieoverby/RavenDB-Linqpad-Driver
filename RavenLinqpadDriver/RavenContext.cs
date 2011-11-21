@@ -39,6 +39,8 @@ namespace RavenLinqpadDriver
 
         void LogRequest(object sender, RequestResultArgs e)
         {
+            if (LogWriter == null) return;
+
             LogWriter.WriteLine(string.Format(@"
 {0} - {1}
 Url: {2}
@@ -77,7 +79,7 @@ Result Data: {7}
             if (Session != null)
                 Session.Dispose();
 
-            if (DocStore != null & ! DocStore.WasDisposed)
+            if (DocStore != null && !DocStore.WasDisposed)
                 DocStore.Dispose();
         }
     }

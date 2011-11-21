@@ -32,7 +32,7 @@ namespace RavenLinqpadDriver
             conn = isNewConnection
                 ? new RavenConnectionInfo { CxInfo = cxInfo }
                 : RavenConnectionInfo.Load(cxInfo);
-            
+
             var win = new RavenConectionDialog(conn);
             var result = win.ShowDialog() == true;
 
@@ -60,10 +60,16 @@ namespace RavenLinqpadDriver
         public override IEnumerable<string> GetAssembliesToAdd()
         {
             return new[] { 
-                "Newtonsoft.Json.Net35.dll",
                 "NLog.dll",
+#if NET35
+                "Newtonsoft.Json.Net35.dll",
                 "Raven.Abstractions-3.5.dll"
+#else
+                "Newtonsoft.Json.dll",
+                "Raven.Abstractions.dll"
+#endif
             };
+
         }
 
         public override IEnumerable<string> GetNamespacesToRemove()
