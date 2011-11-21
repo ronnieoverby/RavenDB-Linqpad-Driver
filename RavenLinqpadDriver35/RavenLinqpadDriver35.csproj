@@ -114,10 +114,7 @@
     <None Include="RavenLinqpadDriver35StrongNameKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\RavenLinqpadDriver\header.xml">
-      <Link>header.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="header.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
