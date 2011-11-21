@@ -1,8 +1,3 @@
-C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\ResolveAssemblyReference.cache
-C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\App.baml
-C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\App.g.cs
-C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35_MarkupCompile.cache
-C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35.g.resources
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\RavenLinqpadDriver35.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\RavenLinqpadDriver35.pdb
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\GalaSoft.MvvmLight.dll
@@ -15,9 +10,14 @@ C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Raven.Client.Lightwe
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\System.Windows.Interactivity.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\GalaSoft.MvvmLight.xml
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\GalaSoft.MvvmLight.Extras.xml
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\ResolveAssemblyReference.cache
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\App.baml
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenConectionDialog.g.cs
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\App.g.cs
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\GeneratedInternalTypeHelper.g.cs
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35_MarkupCompile.cache
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35_MarkupCompile.lref
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenConectionDialog.baml
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35.g.resources
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35.pdb

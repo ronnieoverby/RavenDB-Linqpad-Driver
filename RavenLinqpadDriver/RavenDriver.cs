@@ -23,7 +23,14 @@ namespace RavenLinqpadDriver
 
         public override string Name
         {
-            get { return "RavenDB Driver"; }
+            get
+            {
+#if NET35
+                return "RavenDB Driver (.NET 3.5)"; 
+#else
+                return "RavenDB Driver"; 
+#endif
+            }
         }
 
         public override bool ShowConnectionDialog(IConnectionInfo cxInfo, bool isNewConnection)
