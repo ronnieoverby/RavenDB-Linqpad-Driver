@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Xml.Linq;
+using System.Linq;
 using LINQPad.Extensibility.DataContext;
 using Newtonsoft.Json;
 using Raven.Client.Document;
@@ -9,6 +10,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using System.IO;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace RavenLinqpadDriver
 {
@@ -21,6 +25,29 @@ namespace RavenLinqpadDriver
 
         [JsonIgnore]
         public RelayCommand SaveCommand { get; set; }
+
+        public const string NamePropertyName = "Name";
+        private string _name = null;
+        [Required]
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+
+            set
+            {
+                if (_name == value)
+                {
+                    return;
+                }
+
+                _name = value;
+
+                RaisePropertyChanged(NamePropertyName);
+            }
+        }
 
         public const string UrlPropertyName = "Url";
         private string _url = "http://localhost:8080";
@@ -130,6 +157,50 @@ namespace RavenLinqpadDriver
             }
         }
 
+        public const string AssemblyPathsPropertyName = "AssemblyPaths";
+        private string _assemblyPaths = null;
+        public string AssemblyPaths
+        {
+            get
+            {
+                return _assemblyPaths;
+            }
+
+            set
+            {
+                if (_assemblyPaths == value)
+                {
+                    return;
+                }
+
+                _assemblyPaths = value;
+
+                RaisePropertyChanged(AssemblyPathsPropertyName);
+            }
+        }
+
+        public const string NamespacesPropertyName = "Namespaces";
+        private string _namespaces = null;
+        public string Namespaces
+        {
+            get
+            {
+                return _namespaces;
+            }
+
+            set
+            {
+                if (_namespaces == value)
+                {
+                    return;
+                }
+
+                _namespaces = value;
+
+                RaisePropertyChanged(NamespacesPropertyName);
+            }
+        }        
+
         public RavenConnectionInfo()
         {
             SaveCommand = new RelayCommand(Save, CanSave);
@@ -149,7 +220,61 @@ namespace RavenLinqpadDriver
 
         public bool CanSave()
         {
-            return !Url.IsNullOrWhitespace();
+            return !Name.IsNullOrWhitespace()
+                && !Url.IsNullOrWhitespace()
+                && ValidateAssemblies();
+        }
+
+        public bool ValidateAssemblies()
+        {
+            var paths = GetAssemblyPaths();
+            foreach (var path in paths)
+            {
+                if (!File.Exists(path))
+                    return false;
+
+                try
+                {
+                    if (Assembly.LoadFile(path) == null)
+                        throw new Exception();
+                }
+                catch
+                {
+                    return false;
+                }                
+            }
+
+            return true;
+        }
+
+        public IEnumerable<string> GetAssemblyPaths()
+        {
+            if (AssemblyPaths.IsNullOrWhitespace())
+            {
+                yield break;
+            }
+
+            var paths = AssemblyPaths
+                .Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim());
+
+            foreach (var path in paths)
+            {
+                yield return path;
+            }
+        }
+
+        public IEnumerable<string> GetNamespaces()
+        {
+            if (Namespaces.IsNullOrWhitespace())
+                yield break;
+
+            var namespaces = Namespaces 
+                .Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim());
+
+            foreach (var ns in namespaces)
+                yield return ns;
         }
 
         public static RavenConnectionInfo Load(IConnectionInfo cxInfo)

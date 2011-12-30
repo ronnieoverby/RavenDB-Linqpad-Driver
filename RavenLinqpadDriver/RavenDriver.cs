@@ -8,6 +8,8 @@ namespace RavenLinqpadDriver
 {
     public class RavenDriver : StaticDataContextDriver
     {
+        RavenConnectionInfo _connInfo;
+
         public override string Author
         {
             get { return "Ronnie Overby"; }
@@ -15,10 +17,8 @@ namespace RavenLinqpadDriver
 
         public override string GetConnectionDescription(IConnectionInfo cxInfo)
         {
-            var connInfo = RavenConnectionInfo.Load(cxInfo);
-            return connInfo.DefaultDatabase.IsNullOrWhitespace()
-            ? string.Format("RavenDB: {0}", connInfo.Url)
-            : string.Format("RavenDB: {0} ({1})", connInfo.Url, connInfo.DefaultDatabase);
+            _connInfo = RavenConnectionInfo.Load(cxInfo);
+            return string.Format("RavenDB: {0}", _connInfo.Name);
         }
 
         public override string Name
@@ -75,8 +75,7 @@ namespace RavenLinqpadDriver
                 "Newtonsoft.Json.dll",
                 "Raven.Abstractions.dll"
 #endif
-            };
-
+            }.Union(_connInfo.GetAssemblyPaths());
         }
 
         public override IEnumerable<string> GetNamespacesToRemove()
@@ -93,7 +92,7 @@ namespace RavenLinqpadDriver
                 "Raven.Client.Document",
                 "Raven.Abstractions.Data",
                 "Raven.Client.Linq"
-            });
+            }).Union(_connInfo.GetNamespaces());
         }
 
         public override List<ExplorerItem> GetSchema(IConnectionInfo cxInfo, Type customType)
