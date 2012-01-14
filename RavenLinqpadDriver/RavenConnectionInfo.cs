@@ -250,18 +250,14 @@ namespace RavenLinqpadDriver
         public IEnumerable<string> GetAssemblyPaths()
         {
             if (AssemblyPaths.IsNullOrWhitespace())
-            {
                 yield break;
-            }
 
             var paths = AssemblyPaths
                 .Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim());
 
             foreach (var path in paths)
-            {
                 yield return path;
-            }
         }
 
         public IEnumerable<string> GetNamespaces()

@@ -35,17 +35,18 @@ namespace RavenLinqpadDriver
 
         public override bool ShowConnectionDialog(IConnectionInfo cxInfo, bool isNewConnection)
         {
-            RavenConnectionInfo conn;
-            conn = isNewConnection
+            _connInfo = isNewConnection
                 ? new RavenConnectionInfo { CxInfo = cxInfo }
                 : RavenConnectionInfo.Load(cxInfo);
 
-            var win = new RavenConectionDialog(conn);
+
+
+            var win = new RavenConectionDialog(_connInfo);
             var result = win.ShowDialog() == true;
 
             if (result)
             {
-                conn.Save();
+                _connInfo.Save();
                 cxInfo.CustomTypeInfo.CustomAssemblyPath = Assembly.GetAssembly(typeof(RavenContext)).Location;
                 cxInfo.CustomTypeInfo.CustomTypeName = "RavenLinqpadDriver.RavenContext";
             }
@@ -55,18 +56,20 @@ namespace RavenLinqpadDriver
 
         public override ParameterDescriptor[] GetContextConstructorParameters(IConnectionInfo cxInfo)
         {
+            _connInfo = RavenConnectionInfo.Load(cxInfo);
+
             return new[] { new ParameterDescriptor("connInfo", "RavenLinqpadDriver.RavenConnectionInfo") };
         }
 
         public override object[] GetContextConstructorArguments(IConnectionInfo cxInfo)
         {
-            RavenConnectionInfo connInfo = RavenConnectionInfo.Load(cxInfo);
-            return new[] { connInfo };
+            _connInfo = RavenConnectionInfo.Load(cxInfo);
+            return new[] { _connInfo };
         }
 
         public override IEnumerable<string> GetAssembliesToAdd()
         {
-            return new[] { 
+            var assemblies = new[] { 
                 "NLog.dll",
 #if NET35
                 "Newtonsoft.Json.Net35.dll",
@@ -75,7 +78,14 @@ namespace RavenLinqpadDriver
                 "Newtonsoft.Json.dll",
                 "Raven.Abstractions.dll"
 #endif
-            }.Union(_connInfo.GetAssemblyPaths());
+            }.ToList();
+
+            if (_connInfo!= null)
+            {
+                assemblies.AddRange(_connInfo.GetAssemblyPaths());                
+            }
+
+            return assemblies;
         }
 
         public override IEnumerable<string> GetNamespacesToRemove()
@@ -86,13 +96,20 @@ namespace RavenLinqpadDriver
 
         public override IEnumerable<string> GetNamespacesToAdd()
         {
-            return base.GetNamespacesToAdd()
-                .Union(new[] {
+            var namespaces = new List<String>(base.GetNamespacesToAdd());
+
+            namespaces.AddRange(new[] 
+            {
                 "Raven.Client",
                 "Raven.Client.Document",
-                "Raven.Abstractions.Data",
+                "Raven.Abstractions.Data",              
                 "Raven.Client.Linq"
-            }).Union(_connInfo.GetNamespaces());
+            });
+
+            if (_connInfo != null)
+                namespaces.AddRange(_connInfo.GetNamespaces());
+
+            return namespaces;
         }
 
         public override List<ExplorerItem> GetSchema(IConnectionInfo cxInfo, Type customType)
@@ -102,6 +119,8 @@ namespace RavenLinqpadDriver
 
         public override void InitializeContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager)
         {
+            _connInfo = RavenConnectionInfo.Load(cxInfo);
+
             var rc = context as RavenContext;
             rc.LogWriter = executionManager.SqlTranslationWriter;
         }
