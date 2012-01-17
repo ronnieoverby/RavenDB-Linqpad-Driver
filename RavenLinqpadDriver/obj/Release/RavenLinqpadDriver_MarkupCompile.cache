@@ -4,16 +4,16 @@
 library
 C#
 .cs
-C:\code\raven-linqpad-driver\RavenLinqpadDriver\obj\Debug\
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver\obj\Release\
 RavenLinqpadDriver
 none
 false
-DEBUG;TRACE
+TRACE
 
 2-629771635
 1-2080279558
 81020814063
-201364479146
+20701913248
 App.xaml;RavenConectionDialog.xaml;
 
 False
