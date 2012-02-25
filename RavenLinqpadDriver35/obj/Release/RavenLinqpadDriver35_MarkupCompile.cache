@@ -4,7 +4,7 @@
 library
 C#
 .cs
-C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\
+C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Release\
 RavenLinqpadDriver35
 none
 false
@@ -13,6 +13,6 @@ TRACE;NET35
 2290151892
 1-2080279558
 81779050512
-19321262234
+192010896262
 ..\RavenLinqpadDriver\RavenConectionDialog.xaml;App.xaml;
 

@@ -2,7 +2,7 @@ RavenDB LINQPadDriver
 
 Yeah... a RavenDB driver for LINQPad.
 
-Uses RavenDB client build 573.
+Uses RavenDB client build 616.
 Referencing another version of the client in LINQPad SHOULD take precedence.
 
 Watch the video at http://youtu.be/XgsPvyk0bjM for help getting started.
@@ -12,7 +12,7 @@ Watch the video at http://youtu.be/XgsPvyk0bjM for help getting started.
 
 To install:
 
-1) Download RavenDB_LINQPad_Driver.zip
+1) Download RavenLinqpadDriver x.x.x.x.zip
 
 2) Extract lpx files.
 

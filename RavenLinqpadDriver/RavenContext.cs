@@ -29,13 +29,8 @@ namespace RavenLinqpadDriver
 
         private void SetupLogWriting()
         {
-            // The following code is evil
-            // DocumentStore: private HttpJsonRequestFactory jsonRequestFactory;
-            var type = typeof(DocumentStore);
-            var field = type.GetField("jsonRequestFactory", BindingFlags.NonPublic | BindingFlags.Instance);
-            var jrf = (HttpJsonRequestFactory)field.GetValue(DocStore);
-            jrf.LogRequest += new EventHandler<RequestResultArgs>(LogRequest);
-        }
+            DocStore.JsonRequestFactory.LogRequest += new EventHandler<RequestResultArgs>(LogRequest);
+        }       
 
         void LogRequest(object sender, RequestResultArgs e)
         {

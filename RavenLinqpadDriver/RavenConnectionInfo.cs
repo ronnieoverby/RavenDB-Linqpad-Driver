@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight.Command;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace RavenLinqpadDriver
 {
@@ -208,6 +209,8 @@ namespace RavenLinqpadDriver
 
         public void Save()
         {
+            ValidateAssemblies();
+
             string pw = Password;
             if (!Password.IsNullOrWhitespace())
                 Password = CxInfo.Encrypt(Password);
@@ -221,8 +224,7 @@ namespace RavenLinqpadDriver
         public bool CanSave()
         {
             return !Name.IsNullOrWhitespace()
-                && !Url.IsNullOrWhitespace()
-                && ValidateAssemblies();
+                && !Url.IsNullOrWhitespace();
         }
 
         public bool ValidateAssemblies()
@@ -238,10 +240,17 @@ namespace RavenLinqpadDriver
                     if (Assembly.LoadFile(path) == null)
                         throw new Exception();
                 }
-                catch
+                catch(Exception ex)
                 {
+                    // mvvm.... screw it
+                    MessageBox.Show(string.Format(
+                        "Could not load assemly:{0}{1}{0}{0}Reason:{0}{2}",
+                        Environment.NewLine,
+                        path, 
+                        ex.Message));
+
                     return false;
-                }                
+                }
             }
 
             return true;

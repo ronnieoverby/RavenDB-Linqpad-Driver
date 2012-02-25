@@ -71,12 +71,14 @@ namespace RavenLinqpadDriver
         {
             var assemblies = new[] { 
                 "NLog.dll",
+                "Newtonsoft.Json.dll",
 #if NET35
-                "Newtonsoft.Json.Net35.dll",
+                "Raven.Client.Lightweight-3.5.dll",
                 "Raven.Abstractions-3.5.dll"
 #else
-                "Newtonsoft.Json.dll",
+                "Raven.Client.Lightweight.dll",
                 "Raven.Abstractions.dll"
+
 #endif
             }.ToList();
 
