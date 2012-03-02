@@ -176,6 +176,18 @@
             </summary>
             <value>The metadata.</value>
         </member>
+        <member name="T:Raven.Abstractions.Connection.WebResponseExtensions">
+            <summary>
+            Extensions for web requests
+            </summary>
+        </member>
+        <member name="M:Raven.Abstractions.Connection.WebResponseExtensions.GetResponseStreamWithHttpDecompression(System.Net.WebResponse)">
+            <summary>
+            Gets the response stream with HTTP decompression.
+            </summary>
+            <param name="response">The response.</param>
+            <returns></returns>
+        </member>
         <member name="T:Raven.Abstractions.Data.Attachment">
             <summary>
             Attachment data and metadata
@@ -283,6 +295,12 @@
         <member name="M:Raven.Abstractions.Data.JsonDocument.#ctor">
             <summary>
             Create a new instance of JsonDocument
+            </summary>
+        </member>
+        <member name="F:Raven.Abstractions.Data.JsonDocument.SerializedSizeOnDisk">
+            <summary>
+            How much space this document takes on disk
+            Only relevant during indexing phases, and not available on the client
             </summary>
         </member>
         <member name="M:Raven.Abstractions.Data.JsonDocument.ToJson">
@@ -879,6 +897,11 @@
             Deserialize a <param name="self"/> to an instance of<typeparam name="T"/>
             </summary>
         </member>
+        <member name="M:Raven.Abstractions.Extensions.JsonExtensions.JsonDeserialization``1(System.IO.StreamReader)">
+            <summary>
+            Deserialize a <param name="self"/> to an instance of<typeparam name="T"/>
+            </summary>
+        </member>
         <member name="M:Raven.Json.Linq.Extensions.Value``1(System.Collections.Generic.IEnumerable{Raven.Json.Linq.RavenJToken})">
             <summary>
             Converts the value.
@@ -918,6 +941,16 @@
             </summary>
             <param name="source">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Raven.Json.Linq.RavenJToken"/> that contains the source collection.</param>
             <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Raven.Json.Linq.RavenJToken"/> that contains the values of every node in the source collection.</returns>
+        </member>
+        <member name="T:Raven.Json.Linq.RavenJArray">
+            <summary>
+            Represents a JSON array.
+            </summary>
+        </member>
+        <member name="T:Raven.Json.Linq.RavenJToken">
+            <summary>
+            Represents an abstract JSON token.
+            </summary>
         </member>
         <member name="M:Raven.Json.Linq.RavenJToken.CloneToken">
             <summary>
@@ -1278,6 +1311,11 @@
             </summary>
             <value></value>
         </member>
+        <member name="T:Raven.Json.Linq.RavenJObject">
+            <summary>
+            Represents a JSON object.
+            </summary>
+        </member>
         <member name="M:Raven.Json.Linq.RavenJObject.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Raven.Json.Linq.RavenJObject"/> class.
@@ -1362,17 +1400,55 @@
             <returns>A hash code for the specified object.</returns>
             <exception cref="T:System.ArgumentNullException">The type of <paramref name="obj"/> is a reference type and <paramref name="obj"/> is null.</exception>
         </member>
+        <member name="T:Raven.Json.Linq.RavenJTokenReader">
+            <summary>
+            Represents a reader that provides fast, non-cached, forward-only access to serialized Json data.
+            </summary>
+        </member>
         <member name="M:Raven.Json.Linq.RavenJTokenReader.#ctor(Raven.Json.Linq.RavenJToken)">
             <summary>
             Initializes a new instance of the <see cref="T:Raven.Json.Linq.RavenJTokenReader"/> class.
             </summary>
             <param name="token">The token to read from.</param>
         </member>
+        <member name="M:Raven.Json.Linq.RavenJTokenReader.ReadAsBytes">
+            <summary>
+            Reads the next JSON token from the stream as a <see cref="T:Byte[]"/>.
+            </summary>
+            <returns>
+            A <see cref="T:Byte[]"/> or a null reference if the next JSON token is null.
+            </returns>
+        </member>
+        <member name="M:Raven.Json.Linq.RavenJTokenReader.ReadAsDecimal">
+            <summary>
+            Reads the next JSON token from the stream as a <see cref="T:System.Nullable`1"/>.
+            </summary>
+            <returns>A <see cref="T:System.Nullable`1"/>.</returns>
+        </member>
+        <member name="M:Raven.Json.Linq.RavenJTokenReader.ReadAsInt32">
+            <summary>
+            Reads the next JSON token from the stream as a <see cref="T:System.Nullable`1"/>.
+            </summary>
+            <returns>A <see cref="T:System.Nullable`1"/>.</returns>
+        </member>
         <member name="M:Raven.Json.Linq.RavenJTokenReader.ReadAsDateTimeOffset">
             <summary>
             Reads the next JSON token from the stream as a <see cref="T:System.Nullable`1"/>.
             </summary>
             <returns>A <see cref="T:System.Nullable`1"/>.</returns>
+        </member>
+        <member name="M:Raven.Json.Linq.RavenJTokenReader.Read">
+            <summary>
+            Reads the next JSON token from the stream.
+            </summary>
+            <returns>
+            true if the next token was read successfully; false if there are no more tokens to read.
+            </returns>
+        </member>
+        <member name="T:Raven.Json.Linq.RavenJTokenWriter">
+            <summary>
+            Represents a writer that provides a fast, non-cached, forward-only way of generating Json data.
+            </summary>
         </member>
         <member name="M:Raven.Json.Linq.RavenJTokenWriter.Flush">
             <summary>
@@ -1525,6 +1601,11 @@
             Gets the token being writen.
             </summary>
             <value>The token being writen.</value>
+        </member>
+        <member name="T:Raven.Json.Linq.RavenJValue">
+            <summary>
+            Represents a value in JSON (string, integer, date, etc).
+            </summary>
         </member>
         <member name="M:Raven.Json.Linq.RavenJValue.#ctor(System.Int32)">
             <summary>
@@ -1791,16 +1872,17 @@
             </summary>
             <value>The value.</value>
         </member>
-        <member name="T:Raven.Abstractions.Extensions.StreamExtension">
+        <member name="T:Raven.Abstractions.Extensions.StreamExtensions">
             <summary>
             Extensions for working with streams
             </summary>
         </member>
-        <member name="M:Raven.Abstractions.Extensions.StreamExtension.ReadData(System.IO.Stream)">
+        <member name="M:Raven.Abstractions.Extensions.StreamExtensions.ReadData(System.IO.Stream)">
             <summary>
-            	Reads the entire request buffer to memory and
-            	return it as a byte array.
+            Reads the entire request buffer to memory and return it as a byte array.
             </summary>
+            <param name="stream">The stream to read.</param>
+            <returns>The returned byte array.</returns>
         </member>
         <member name="T:Raven.Abstractions.Indexing.FieldIndexing">
             <summary>
@@ -2318,6 +2400,8 @@
         <member name="P:Raven.Abstractions.Replication.ReplicationDestination.ConnectionStringName">
             <summary>
             The name of the connection string specified in the 
+            server configuration file. 
+            Override all other properties of the destination
             </summary>
         </member>
         <member name="P:Raven.Abstractions.Replication.ReplicationDestination.Url">
@@ -2325,6 +2409,31 @@
             Gets or sets the URL of the replication destination
             </summary>
             <value>The URL.</value>
+        </member>
+        <member name="P:Raven.Abstractions.Replication.ReplicationDestination.Username">
+            <summary>
+            The replication server username to use
+            </summary>
+        </member>
+        <member name="P:Raven.Abstractions.Replication.ReplicationDestination.Password">
+            <summary>
+            The replication server password to use
+            </summary>
+        </member>
+        <member name="P:Raven.Abstractions.Replication.ReplicationDestination.Domain">
+            <summary>
+            The replication server domain to use
+            </summary>
+        </member>
+        <member name="P:Raven.Abstractions.Replication.ReplicationDestination.ApiKey">
+            <summary>
+            The replication server api key to use
+            </summary>
+        </member>
+        <member name="P:Raven.Abstractions.Replication.ReplicationDestination.Database">
+            <summary>
+            The database to use
+            </summary>
         </member>
         <member name="P:Raven.Abstractions.Replication.ReplicationDestination.TransitiveReplicationBehavior">
             <summary>

@@ -21,3 +21,16 @@ C:\code\raven-linqpad-driver\RavenLinqpadDriver\obj\Debug\RavenConectionDialog.b
 C:\code\raven-linqpad-driver\RavenLinqpadDriver\obj\Debug\RavenLinqpadDriver.g.resources
 C:\code\raven-linqpad-driver\RavenLinqpadDriver\obj\Debug\RavenLinqpadDriver.dll
 C:\code\raven-linqpad-driver\RavenLinqpadDriver\obj\Debug\RavenLinqpadDriver.pdb
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\AsyncCtpLibrary.dll
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Client.Debug.dll
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Client.MvcIntegration.dll
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\AsyncCtpLibrary.xml
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Newtonsoft.Json.pdb
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Newtonsoft.Json.xml
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\NLog.xml
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Abstractions.pdb
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Abstractions.xml
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Client.Debug.pdb
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Client.Lightweight.pdb
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Client.Lightweight.xml
+C:\code\raven-linqpad-driver\RavenLinqpadDriver\bin\Debug\Raven.Client.MvcIntegration.pdb

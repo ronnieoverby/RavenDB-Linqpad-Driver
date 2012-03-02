@@ -16,7 +16,7 @@
         </member>
         <member name="T:Raven.Client.Connection.Profiling.IHoldProfilingInformation">
             <summary>
-            Interface for getting profiling infomration about the actions of the system
+            Interface for getting profiling information about the actions of the system
             within a given context, usually the context is database commands or async database commands
             </summary>
         </member>
@@ -164,7 +164,7 @@
             Retrieve the statistics for the database asynchronously
             </summary>
         </member>
-        <member name="M:Raven.Client.Connection.Async.IAsyncDatabaseCommands.GetDatabaseNamesAsync">
+        <member name="M:Raven.Client.Connection.Async.IAsyncDatabaseCommands.GetDatabaseNamesAsync(System.Int32)">
             <summary>
             Gets the list of databases from the server asynchronously
             </summary>
@@ -378,7 +378,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Raven.Client.Connection.Async.AsyncServerClient.GetDatabaseNamesAsync">
+        <member name="M:Raven.Client.Connection.Async.AsyncServerClient.GetDatabaseNamesAsync(System.Int32)">
             <summary>
             Gets the list of databases from the server asynchronously
             </summary>
@@ -655,7 +655,7 @@
             <param name="key">The key.</param>
             <param name="etag">The etag.</param>
         </member>
-        <member name="M:Raven.Client.Connection.IDatabaseCommands.GetDatabaseNames">
+        <member name="M:Raven.Client.Connection.IDatabaseCommands.GetDatabaseNames(System.Int32)">
             <summary>
             Returns the names of all tenant databases on the RavenDB server
             </summary>
@@ -815,12 +815,6 @@
             <summary>
             Create a new instance of <see cref="T:Raven.Client.Connection.IDatabaseCommands"/> that will interacts
             with the default database
-            </summary>
-        </member>
-        <member name="M:Raven.Client.Connection.IDatabaseCommands.GetRootDatabase">
-            <summary>
-            Create a new instance of <see cref="T:Raven.Client.Connection.IDatabaseCommands"/> that will interact
-            with the root database. Useful if the database has works against a tenant database
             </summary>
         </member>
         <member name="M:Raven.Client.Connection.IDatabaseCommands.Suggest(System.String,Raven.Abstractions.Data.SuggestionQuery)">
@@ -1278,7 +1272,7 @@
             Access the RavenDB operations using HTTP
             </summary>
         </member>
-        <member name="M:Raven.Client.Connection.ServerClient.#ctor(System.String,Raven.Client.Document.DocumentConvention,System.Net.ICredentials,Raven.Client.Connection.ReplicationInformer,Raven.Client.Connection.HttpJsonRequestFactory,System.Nullable{System.Guid})">
+        <member name="M:Raven.Client.Connection.ServerClient.#ctor(System.String,Raven.Client.Document.DocumentConvention,System.Net.ICredentials,System.Func{System.String,Raven.Client.Connection.ReplicationInformer},System.String,Raven.Client.Connection.HttpJsonRequestFactory,System.Nullable{System.Guid})">
             <summary>
             Initializes a new instance of the <see cref="T:Raven.Client.Connection.ServerClient"/> class.
             </summary>
@@ -1497,12 +1491,6 @@
             with the specified database
             </summary>
         </member>
-        <member name="M:Raven.Client.Connection.ServerClient.GetRootDatabase">
-            <summary>
-            Create a new instance of <see cref="T:Raven.Client.Connection.IDatabaseCommands"/> that will interact
-            with the root database. Useful if the database has works against a tenant database.
-            </summary>
-        </member>
         <member name="M:Raven.Client.Connection.ServerClient.DeleteByIndex(System.String,Raven.Abstractions.Data.IndexQuery,System.Boolean)">
             <summary>
             Perform a set based deletes using the specified index.
@@ -1660,18 +1648,6 @@
             Gets or sets the web request.
             </summary>
             <value>The request.</value>
-        </member>
-        <member name="T:Raven.Client.Connection.WebResponseExtensions">
-            <summary>
-            Extensions for web requests
-            </summary>
-        </member>
-        <member name="M:Raven.Client.Connection.WebResponseExtensions.GetResponseStreamWithHttpDecompression(System.Net.WebResponse)">
-            <summary>
-            Gets the response stream with HTTP decompression.
-            </summary>
-            <param name="response">The response.</param>
-            <returns></returns>
         </member>
         <member name="T:Raven.Client.Converters.GuidConverter">
             <summary>
@@ -3799,6 +3775,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Raven.Client.Document.InMemoryDocumentSessionOperations.MarkReadOnly(System.Object)">
+            <summary>
+            Mark the entity as read only, change tracking won't apply 
+            to such an entity. This can be done as an optimization step, so 
+            we don't need to check the entity for changes.
+            </summary>
+        </member>
         <member name="M:Raven.Client.Document.InMemoryDocumentSessionOperations.EntityChanged(System.Object,Raven.Client.Document.InMemoryDocumentSessionOperations.DocumentMetadata)">
             <summary>
             Determines if the entity have changed.
@@ -4125,6 +4108,13 @@
             <summary>
             Clears this instance.
             Remove all entities from the delete queue and stops tracking changes for all entities.
+            </summary>
+        </member>
+        <member name="M:Raven.Client.IAdvancedDocumentSessionOperations.MarkReadOnly(System.Object)">
+            <summary>
+            Mark the entity as read only, change tracking won't apply 
+            to such an entity. This can be done as an optimization step, so 
+            we don't need to check the entity for changes.
             </summary>
         </member>
         <member name="M:Raven.Client.IAdvancedDocumentSessionOperations.GetMetadataFor``1(``0)">
@@ -6004,7 +5994,7 @@
         </member>
         <member name="F:Raven.Client.Document.DocumentStore.currentSessionId">
             <summary>
-            The current session id - only used during contsruction
+            The current session id - only used during construction
             </summary>
         </member>
         <member name="F:Raven.Client.Document.DocumentStore.databaseCommandsGenerator">
@@ -8527,7 +8517,7 @@
             Suggest alternative values for the queried term
             </summary>
         </member>
-        <member name="M:Raven.Client.Linq.LinqExtensions.Search``1(Raven.Client.Linq.IRavenQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Decimal)">
+        <member name="M:Raven.Client.Linq.LinqExtensions.Search``1(Raven.Client.Linq.IRavenQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Decimal,Raven.Client.Linq.SearchOptions)">
             <summary>
             Perform a search for documents which fields that match the searchTerms.
             If there is more than a single term, each of them will be checked independently.
