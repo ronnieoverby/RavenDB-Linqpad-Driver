@@ -94,6 +94,26 @@ namespace RavenLinqpadDriver
             }
         }
 
+        public const string ApiKeyPropertyName = "ApiKey";
+        private string _apiKey = null;
+        public string ApiKey
+        {
+            get
+            {
+                return _apiKey;
+            }
+            set
+            {
+                if (_apiKey == value)
+                {
+                    return;
+                }
+                _apiKey = value;
+
+                RaisePropertyChanged(ApiKeyPropertyName);
+            }
+        }
+
         public const string ResourceManagerIdPropertyName = "ResourceManagerId";
         private Guid? _resourceManagerId = null;
         public Guid? ResourceManagerId
@@ -200,7 +220,7 @@ namespace RavenLinqpadDriver
 
                 RaisePropertyChanged(NamespacesPropertyName);
             }
-        }        
+        }
 
         public RavenConnectionInfo()
         {
@@ -240,13 +260,13 @@ namespace RavenLinqpadDriver
                     if (Assembly.LoadFile(path) == null)
                         throw new Exception();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     // mvvm.... screw it
                     MessageBox.Show(string.Format(
                         "Could not load assemly:{0}{1}{0}{0}Reason:{0}{2}",
                         Environment.NewLine,
-                        path, 
+                        path,
                         ex.Message));
 
                     return false;
@@ -274,7 +294,7 @@ namespace RavenLinqpadDriver
             if (Namespaces.IsNullOrWhitespace())
                 yield break;
 
-            var namespaces = Namespaces 
+            var namespaces = Namespaces
                 .Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim());
 
@@ -297,7 +317,7 @@ namespace RavenLinqpadDriver
                 return rvnConn;
             }
 
-            return null; 
+            return null;
         }
 
         public DocumentStore CreateDocStore()
@@ -317,6 +337,9 @@ namespace RavenLinqpadDriver
 
                 if (!Username.IsNullOrWhitespace())
                     docStore.Credentials = new NetworkCredential(Username, Password);
+
+                if (!ApiKey.IsNullOrWhitespace())
+                    docStore.ApiKey = ApiKey;
 
                 return docStore;
             }
