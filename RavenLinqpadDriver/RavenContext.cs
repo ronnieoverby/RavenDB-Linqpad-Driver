@@ -13,7 +13,24 @@ namespace RavenLinqpadDriver
 {
     public class RavenContext : IDisposable
     {
-        public DocumentStore DocStore { get; private set; }
+        private DocumentStore _docStore;
+        public DocumentStore DocStore
+        {
+            get
+            {
+                return _docStore;
+            }
+            set
+            {
+                if (_docStore != null && !_docStore.WasDisposed)
+                    _docStore.Dispose();
+
+                _docStore = value;
+
+                if (_docStore != null)
+                    _docStore.Initialize();
+            }
+        }
         public IDocumentSession Session { get; private set; }
         internal TextWriter LogWriter { get; set; }
 
@@ -61,7 +78,7 @@ Result Data: {7}
                 throw new ArgumentNullException("conn", "conn is null.");
 
             DocStore = conn.CreateDocStore();
-            DocStore.Initialize();
+            DocStore.Initialize();            
         }
 
         private void InitSession()
