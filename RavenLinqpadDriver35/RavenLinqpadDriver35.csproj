@@ -62,10 +62,10 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Raven.Abstractions-3.5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB-Client.1.0.701\lib\net35\Raven.Abstractions-3.5.dll</HintPath>
+      <HintPath>..\packages\RavenDB-Client.1.0.888\lib\net35\Raven.Abstractions-3.5.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight-3.5, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB-Client.1.0.701\lib\net35\Raven.Client.Lightweight-3.5.dll</HintPath>
+      <HintPath>..\packages\RavenDB-Client.1.0.888\lib\net35\Raven.Client.Lightweight-3.5.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

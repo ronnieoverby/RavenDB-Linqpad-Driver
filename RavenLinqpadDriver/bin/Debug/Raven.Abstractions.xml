@@ -305,31 +305,31 @@
         </member>
         <member name="M:Raven.Abstractions.Data.JsonDocument.ToJson">
             <summary>
-            	Translate the json document to a <see cref="T:Raven.Json.Linq.RavenJObject"/>
+            Translate the json document to a <see cref="T:Raven.Json.Linq.RavenJObject"/>
             </summary>
             <returns></returns>
         </member>
         <member name="P:Raven.Abstractions.Data.JsonDocument.DataAsJson">
             <summary>
-            	Gets or sets the document data as json.
+            Gets or sets the document data as json.
             </summary>
             <value>The data as json.</value>
         </member>
         <member name="P:Raven.Abstractions.Data.JsonDocument.Metadata">
             <summary>
-            	Gets or sets the metadata for the document
+            Gets or sets the metadata for the document
             </summary>
             <value>The metadata.</value>
         </member>
         <member name="P:Raven.Abstractions.Data.JsonDocument.Key">
             <summary>
-            	Gets or sets the key for the document
+            Gets or sets the key for the document
             </summary>
             <value>The key.</value>
         </member>
         <member name="P:Raven.Abstractions.Data.JsonDocument.NonAuthoritativeInformation">
             <summary>
-            	Gets or sets a value indicating whether this document is non authoritative (modified by uncommitted transaction).
+            Gets or sets a value indicating whether this document is non authoritative (modified by uncommitted transaction).
             </summary>
         </member>
         <member name="P:Raven.Abstractions.Data.JsonDocument.Etag">
@@ -340,7 +340,7 @@
         </member>
         <member name="P:Raven.Abstractions.Data.JsonDocument.LastModified">
             <summary>
-            	Gets or sets the last modified date for the document
+            Gets or sets the last modified date for the document
             </summary>
             <value>The last modified.</value>
         </member>
@@ -861,7 +861,7 @@
              Extensions for Linq expressions
             </summary>
         </member>
-        <member name="M:Raven.Abstractions.Extensions.ExpressionExtensions.ToPropertyPath``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+        <member name="M:Raven.Abstractions.Extensions.ExpressionExtensions.ToPropertyPath``2(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.String)">
             <summary>
              Turn an expression like x=&lt; x.User.Name to "User.Name"
             </summary>
@@ -2465,6 +2465,18 @@
             <summary>
             The last etag indexed by the index.
             This can be used to determine whatever the results can be cached.
+            </summary>
+        </member>
+        <member name="P:Raven.Abstractions.Data.QueryResult.ResultEtag">
+            <summary>
+            The ETag value for this index current state, which include what we docs we indexed,
+            what document were deleted, etc.
+            </summary>
+        </member>
+        <member name="P:Raven.Abstractions.Data.QueryResult.NonAuthoritativeInformation">
+            <summary>
+            Gets or sets a value indicating whether any of the documents returned by this query
+            are non authoritative (modified by uncommitted transaction).
             </summary>
         </member>
         <member name="T:Raven.Abstractions.Indexing.SortOptions">
