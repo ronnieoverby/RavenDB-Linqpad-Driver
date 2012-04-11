@@ -42,6 +42,9 @@
     <AssemblyOriginatorKeyFile>RavenLinqpadDriver35StrongNameKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fasterflect">
+      <HintPath>..\packages\fasterflect.2.1.0\lib\net35\Fasterflect.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight">
       <HintPath>..\packages\MvvmLight.3.0.3\lib\net35\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -85,6 +88,9 @@
     </Compile>
     <Compile Include="..\RavenLinqpadDriver\GuidValueConverter.cs">
       <Link>GuidValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\RavenLinqpadDriver\IConfigureDocumentStore.cs">
+      <Link>IConfigureDocumentStore.cs</Link>
     </Compile>
     <Compile Include="..\RavenLinqpadDriver\RavenConectionDialog.xaml.cs">
       <Link>RavenConectionDialog.xaml.cs</Link>

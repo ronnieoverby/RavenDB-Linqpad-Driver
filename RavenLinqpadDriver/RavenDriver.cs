@@ -38,9 +38,7 @@ namespace RavenLinqpadDriver
             _connInfo = isNewConnection
                 ? new RavenConnectionInfo { CxInfo = cxInfo }
                 : RavenConnectionInfo.Load(cxInfo);
-
-
-
+            
             var win = new RavenConectionDialog(_connInfo);
             var result = win.ShowDialog() == true;
 
@@ -78,12 +76,11 @@ namespace RavenLinqpadDriver
 #else
                 "Raven.Client.Lightweight.dll",
                 "Raven.Abstractions.dll"
-
 #endif
             }.ToList();
 
             if (_connInfo!= null)
-            {
+            {                
                 assemblies.AddRange(_connInfo.GetAssemblyPaths());                
             }
 
@@ -121,6 +118,7 @@ namespace RavenLinqpadDriver
 
         public override void InitializeContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager)
         {
+            
             _connInfo = RavenConnectionInfo.Load(cxInfo);
 
             var rc = context as RavenContext;
