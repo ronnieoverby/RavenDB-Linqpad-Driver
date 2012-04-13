@@ -1,6 +1,6 @@
-﻿using Raven.Client.Document;
+﻿using Raven.Client;
 
-namespace RavenLinqpadDriver
+namespace RavenLinqpadDriver.Bridge
 {
     public interface IConfigureDocumentStore
     {
@@ -9,6 +9,6 @@ namespace RavenLinqpadDriver
         /// </summary>
         /// <param name="preConfiguredDocStore">A DocumentStore object that has been configured with the values from the connection properties dialog window.</param>
         /// <returns>A completely configured DocumentStore instance.</returns>
-        DocumentStore ConfigureDocumentStore(DocumentStore preConfiguredDocStore);
+        IDocumentStore ConfigureDocumentStore(IDocumentStore preConfiguredDocStore);
     }
 }

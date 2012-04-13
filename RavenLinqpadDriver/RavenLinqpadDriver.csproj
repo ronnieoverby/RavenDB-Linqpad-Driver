@@ -37,7 +37,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>RavenLinqpadDriverStrongNameKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\RavenLinqpadDriverStrongNameKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.5' ">$(DefineConstants);NET35</DefineConstants>
@@ -56,6 +56,7 @@
       <HintPath>..\lib\LINQPad.exe</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -73,9 +74,6 @@
     </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB-Client.1.0.888\lib\net40\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight.FSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB-Client.1.0.888\lib\net40\Raven.Client.Lightweight.FSharp.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.MvcIntegration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB-Client.1.0.888\lib\net40\Raven.Client.MvcIntegration.dll</HintPath>
@@ -97,7 +95,6 @@
   <ItemGroup>
     <Compile Include="AssemblyVersion.cs" />
     <Compile Include="GuidValueConverter.cs" />
-    <Compile Include="IConfigureDocumentStore.cs" />
     <Compile Include="RavenDriver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RavenConectionDialog.xaml.cs">
@@ -108,8 +105,10 @@
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\RavenLinqpadDriverStrongNameKey.pfx">
+      <Link>RavenLinqpadDriverStrongNameKey.pfx</Link>
+    </None>
     <None Include="packages.config" />
-    <None Include="RavenLinqpadDriverStrongNameKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="header.xml">
@@ -125,6 +124,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RavenLinqpadDriver.Bridge\RavenLinqpadDriver.Bridge.csproj">
+      <Project>{E24B5D7E-C604-445F-8B0A-24B5E1D06CA5}</Project>
+      <Name>RavenLinqpadDriver.Bridge</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

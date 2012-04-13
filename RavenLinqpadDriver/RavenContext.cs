@@ -1,21 +1,22 @@
 ﻿using System;
-using Fasterflect;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Raven.Client.Document;
-using Raven.Client;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using Fasterflect;
+using Raven.Client;
 using Raven.Client.Connection.Profiling;
-using Raven.Client.Connection;
-using System.Reflection;
+using Raven.Client.Document;
+using Raven.Client.Indexes;
+using Raven.Client.Linq;
+using RavenLinqpadDriver.Bridge;
 
 namespace RavenLinqpadDriver
 {
-    public class RavenContext : IDisposable
+    public class RavenContext : IDocumentSession
     {
-        public DocumentStore DocStore { get; private set; }
-        public IDocumentSession Session { get; private set; }
+        private IDocumentStore _docStore;
+        private IDocumentSession _session;
         internal TextWriter LogWriter { get; set; }
 
         public RavenContext(RavenConnectionInfo connInfo)
@@ -23,16 +24,14 @@ namespace RavenLinqpadDriver
             if (connInfo == null)
                 throw new ArgumentNullException("conn", "conn is null.");
 
-            
-
             InitDocStore(connInfo);
             SetupLogWriting();
-            Session = DocStore.OpenSession();
+            _session = _docStore.OpenSession();
         }
 
         private void SetupLogWriting()
         {
-            DocStore.JsonRequestFactory.LogRequest += new EventHandler<RequestResultArgs>(LogRequest);
+            _docStore.JsonRequestFactory.LogRequest += new EventHandler<RequestResultArgs>(LogRequest);
         }
 
         void LogRequest(object sender, RequestResultArgs e)
@@ -59,11 +58,11 @@ Result Data: {7}
         }
 
         private void InitDocStore(RavenConnectionInfo conn)
-        {            
+        {
             if (conn == null)
                 throw new ArgumentNullException("conn", "conn is null.");
 
-            DocStore = conn.CreateDocStore();
+            _docStore = conn.CreateDocStore();
 
             // search for a user defined initializer
             var refAssemblyNames = this.GetType().Assembly.GetReferencedAssemblies();
@@ -76,19 +75,114 @@ Result Data: {7}
             if (initType != null)
             {
                 var docStoreInit = (IConfigureDocumentStore)initType.CreateInstance();
-                docStoreInit.ConfigureDocumentStore(DocStore);
+                docStoreInit.ConfigureDocumentStore(_docStore);
             }
 
-            DocStore.Initialize();
+            _docStore.Initialize();
         }
 
         public void Dispose()
         {
-            if (Session != null)
-                Session.Dispose();
+            if (_session != null)
+                _session.Dispose();
 
-            if (DocStore != null && !DocStore.WasDisposed)
-                DocStore.Dispose();
+            if (_docStore != null && !_docStore.WasDisposed)
+                _docStore.Dispose();
         }
+
+        #region IDocumentSession Members
+        public ISyncAdvancedSessionOperation Advanced
+        {
+            get { return _session.Advanced; }
+        }
+
+        public void Delete<T>(T entity)
+        {
+            _session.Delete<T>(entity);
+        }
+
+        public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
+        {
+            return _session.Include<T>(path);
+        }
+
+        public ILoaderWithInclude<object> Include(string path)
+        {
+            return _session.Include(path);
+        }
+
+        public T Load<T>(ValueType id)
+        {
+            return _session.Load<T>(id);
+        }
+
+        public T[] Load<T>(IEnumerable<string> ids)
+        {
+            return _session.Load<T>(ids);
+        }
+
+        public T[] Load<T>(params string[] ids)
+        {
+            return _session.Load<T>(ids);
+        }
+
+        public T Load<T>(string id)
+        {
+            return _session.Load<T>(id);
+        }
+
+        public IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new()
+        {
+            return _session.Query<T, TIndexCreator>();
+        }
+
+        public IRavenQueryable<T> Query<T>()
+        {
+            return _session.Query<T>();
+        }
+
+        public IRavenQueryable<T> Query<T>(string indexName)
+        {
+            return _session.Query<T>(indexName);
+        }
+
+        public void SaveChanges()
+        {
+            _session.SaveChanges();
+        }
+
+        public void Store(object entity, Guid etag, string id)
+        {
+            _session.Store(entity, etag, id);
+        }
+
+        public void Store(object entity, Guid etag)
+        {
+            _session.Store(entity, etag);
+        }
+
+#if !NET35
+        public void Store(dynamic entity, string id)
+        {
+            _session.Store(entity, id);
+        }
+
+        public void Store(dynamic entity)
+        {
+            _session.Store(entity);
+        }
+#else
+        public void Store(object entity, string id)
+        {
+            _session.Store(entity, id);
+        }
+
+        public void Store(object entity)
+        {
+            _session.Store(entity);
+        }
+#endif
+
+        #endregion
     }
 }

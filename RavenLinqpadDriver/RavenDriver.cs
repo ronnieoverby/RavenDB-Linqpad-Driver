@@ -28,7 +28,7 @@ namespace RavenLinqpadDriver
 #if NET35
                 return "RavenDB Driver (.NET 3.5)"; 
 #else
-                return "RavenDB Driver"; 
+                return "RavenDB Driver";
 #endif
             }
         }
@@ -38,7 +38,7 @@ namespace RavenLinqpadDriver
             _connInfo = isNewConnection
                 ? new RavenConnectionInfo { CxInfo = cxInfo }
                 : RavenConnectionInfo.Load(cxInfo);
-            
+
             var win = new RavenConectionDialog(_connInfo);
             var result = win.ShowDialog() == true;
 
@@ -79,11 +79,6 @@ namespace RavenLinqpadDriver
 #endif
             }.ToList();
 
-            if (_connInfo!= null)
-            {                
-                assemblies.AddRange(_connInfo.GetAssemblyPaths());                
-            }
-
             return assemblies;
         }
 
@@ -118,11 +113,14 @@ namespace RavenLinqpadDriver
 
         public override void InitializeContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager)
         {
-            
             _connInfo = RavenConnectionInfo.Load(cxInfo);
 
             var rc = context as RavenContext;
             rc.LogWriter = executionManager.SqlTranslationWriter;
+
+            // load user's assemblies
+            foreach (var assembly in _connInfo.GetAssemblyPaths())
+                LoadAssemblySafely(assembly);
         }
 
         public override void TearDownContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager, object[] constructorArguments)

@@ -5,7 +5,6 @@ C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\App.g.cs
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\RavenLinqpadDriver35_MarkupCompile.cache
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\RavenLinqpadDriver35_MarkupCompile.lref
-C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\RavenLinqpadDriver35.g.resources
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\header.xml
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\RavenLinqpadDriver35.dll
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\RavenLinqpadDriver35.pdb
@@ -28,5 +27,8 @@ C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\Raven.Abstractions-3
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\Raven.Client.Lightweight-3.5.pdb
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\Raven.Client.Lightweight-3.5.xml
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\RavenConectionDialog.baml
+C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\RavenLinqpadDriver35.g.resources
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\RavenLinqpadDriver35.dll
 C:\code\raven-linqpad-driver\RavenLinqpadDriver35\obj\Debug\RavenLinqpadDriver35.pdb
+C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\RavenLinqpadDriver.Bridge35.dll
+C:\code\raven-linqpad-driver\RavenLinqpadDriver35\bin\Debug\RavenLinqpadDriver.Bridge35.pdb

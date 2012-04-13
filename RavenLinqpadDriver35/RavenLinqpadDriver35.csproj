@@ -39,7 +39,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>RavenLinqpadDriver35StrongNameKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\RavenLinqpadDriverStrongNameKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Fasterflect">
@@ -89,9 +89,6 @@
     <Compile Include="..\RavenLinqpadDriver\GuidValueConverter.cs">
       <Link>GuidValueConverter.cs</Link>
     </Compile>
-    <Compile Include="..\RavenLinqpadDriver\IConfigureDocumentStore.cs">
-      <Link>IConfigureDocumentStore.cs</Link>
-    </Compile>
     <Compile Include="..\RavenLinqpadDriver\RavenConectionDialog.xaml.cs">
       <Link>RavenConectionDialog.xaml.cs</Link>
       <DependentUpon>RavenConectionDialog.xaml</DependentUpon>
@@ -122,13 +119,21 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\RavenLinqpadDriverStrongNameKey.pfx">
+      <Link>RavenLinqpadDriverStrongNameKey.pfx</Link>
+    </None>
     <None Include="packages.config" />
-    <None Include="RavenLinqpadDriver35StrongNameKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="header.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RavenLinqpadDriver.Bridge35\RavenLinqpadDriver.Bridge35.csproj">
+      <Project>{79EFCFA6-AB8F-48E4-BFD5-44CE9F88BE7B}</Project>
+      <Name>RavenLinqpadDriver.Bridge35</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
