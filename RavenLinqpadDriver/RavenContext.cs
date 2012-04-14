@@ -17,6 +17,13 @@ namespace RavenLinqpadDriver
     {
         private IDocumentStore _docStore;
         private IDocumentSession _session;
+        private IDocumentSession Session
+        {
+            get
+            {
+                return _session ?? (_session = _docStore.OpenSession());
+            }
+        }
         internal TextWriter LogWriter { get; set; }
 
         public RavenContext(RavenConnectionInfo connInfo)
@@ -26,8 +33,8 @@ namespace RavenLinqpadDriver
 
             InitDocStore(connInfo);
             SetupLogWriting();
-            _session = _docStore.OpenSession();
         }
+
 
         private void SetupLogWriting()
         {
@@ -64,7 +71,9 @@ Result Data: {7}
 
             _docStore = conn.CreateDocStore();
 
-            // search for a user defined initializer
+
+            // work on this!!!
+            //search for a user defined initializer
             var refAssemblyNames = this.GetType().Assembly.GetReferencedAssemblies();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             var initType = (from a in assemblies
@@ -93,83 +102,83 @@ Result Data: {7}
         #region IDocumentSession Members
         public ISyncAdvancedSessionOperation Advanced
         {
-            get { return _session.Advanced; }
+            get { return Session.Advanced; }
         }
 
         public void Delete<T>(T entity)
         {
-            _session.Delete<T>(entity);
+            Session.Delete<T>(entity);
         }
 
         public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
         {
-            return _session.Include<T>(path);
+            return Session.Include<T>(path);
         }
 
         public ILoaderWithInclude<object> Include(string path)
         {
-            return _session.Include(path);
+            return Session.Include(path);
         }
 
         public T Load<T>(ValueType id)
         {
-            return _session.Load<T>(id);
+            return Session.Load<T>(id);
         }
 
         public T[] Load<T>(IEnumerable<string> ids)
         {
-            return _session.Load<T>(ids);
+            return Session.Load<T>(ids);
         }
 
         public T[] Load<T>(params string[] ids)
         {
-            return _session.Load<T>(ids);
+            return Session.Load<T>(ids);
         }
 
         public T Load<T>(string id)
         {
-            return _session.Load<T>(id);
+            return Session.Load<T>(id);
         }
 
         public IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new()
         {
-            return _session.Query<T, TIndexCreator>();
+            return Session.Query<T, TIndexCreator>();
         }
 
         public IRavenQueryable<T> Query<T>()
         {
-            return _session.Query<T>();
+            return Session.Query<T>();
         }
 
         public IRavenQueryable<T> Query<T>(string indexName)
         {
-            return _session.Query<T>(indexName);
+            return Session.Query<T>(indexName);
         }
 
         public void SaveChanges()
         {
-            _session.SaveChanges();
+            Session.SaveChanges();
         }
 
         public void Store(object entity, Guid etag, string id)
         {
-            _session.Store(entity, etag, id);
+            Session.Store(entity, etag, id);
         }
 
         public void Store(object entity, Guid etag)
         {
-            _session.Store(entity, etag);
+            Session.Store(entity, etag);
         }
 
 #if !NET35
         public void Store(dynamic entity, string id)
         {
-            _session.Store(entity, id);
+            Session.Store(entity, id);
         }
 
         public void Store(dynamic entity)
         {
-            _session.Store(entity);
+            Session.Store(entity);
         }
 #else
         public void Store(object entity, string id)

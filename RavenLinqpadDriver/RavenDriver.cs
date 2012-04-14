@@ -79,6 +79,11 @@ namespace RavenLinqpadDriver
 #endif
             }.ToList();
 
+            if (_connInfo != null)
+            {
+                assemblies.AddRange(_connInfo.GetAssemblyPaths());
+            }
+
             return assemblies;
         }
 
@@ -119,8 +124,11 @@ namespace RavenLinqpadDriver
             rc.LogWriter = executionManager.SqlTranslationWriter;
 
             // load user's assemblies
-            foreach (var assembly in _connInfo.GetAssemblyPaths())
-                LoadAssemblySafely(assembly);
+
+            // this looks like it's linqpad beta only, so load in GetAssembliesToAdd until 
+            // this method is available in the release version of linqpad, damnit
+            // foreach (var assembly in _connInfo.GetAssemblyPaths())
+            //    LoadAssemblySafely(assembly);
         }
 
         public override void TearDownContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager, object[] constructorArguments)
