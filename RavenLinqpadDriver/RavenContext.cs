@@ -96,7 +96,7 @@ Result Data: {7}
                         Password = conn.Password
                     },
                     ResourceManagerId = conn.ResourceManagerId,
-                    //conn.ApiKey
+                    ApiKey = conn.ApiKey
                 });
             }
             else

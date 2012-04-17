@@ -12,7 +12,6 @@ namespace RavenLinqpadDriver.Bridge
         public string DefaultDatabase { get; set; }
         public NetworkCredential Credentials { get; set; }
         public Guid? ResourceManagerId { get; set; }
-
-        
+        public string ApiKey { get; set; }
     }
 }
