@@ -94,6 +94,26 @@ namespace RavenLinqpadDriver
             }
         }
 
+        public const string ApiKeyPropertyName = "ApiKey";
+        private string _apiKey = null;
+        public string ApiKey
+        {
+            get
+            {
+                return _apiKey;
+            }
+            set
+            {
+                if (_apiKey == value)
+                {
+                    return;
+                }
+                _apiKey = value;
+
+                RaisePropertyChanged(ApiKeyPropertyName);
+            }
+        }
+
         public const string ResourceManagerIdPropertyName = "ResourceManagerId";
         private Guid? _resourceManagerId = null;
         public Guid? ResourceManagerId
@@ -317,6 +337,9 @@ namespace RavenLinqpadDriver
 
                 if (!Username.IsNullOrWhitespace())
                     docStore.Credentials = new NetworkCredential(Username, Password);
+
+                if (!ApiKey.IsNullOrWhitespace())
+                    docStore.ApiKey = ApiKey;
 
                 return docStore;
             }
