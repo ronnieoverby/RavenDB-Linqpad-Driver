@@ -17,7 +17,7 @@ using System.Windows;
 
 namespace RavenLinqpadDriver
 {
-    public class RavenConnectionInfo : ViewModelBase
+    public class RavenConnectionDialogViewModel : ViewModelBase
     {
         public const string RavenConnectionInfoKey = "RavenConnectionInfo";
 
@@ -202,7 +202,7 @@ namespace RavenLinqpadDriver
             }
         }        
 
-        public RavenConnectionInfo()
+        public RavenConnectionDialogViewModel()
         {
             SaveCommand = new RelayCommand(Save, CanSave);
         }
@@ -282,13 +282,13 @@ namespace RavenLinqpadDriver
                 yield return ns;
         }
 
-        public static RavenConnectionInfo Load(IConnectionInfo cxInfo)
+        public static RavenConnectionDialogViewModel Load(IConnectionInfo cxInfo)
         {
             XElement xe = cxInfo.DriverData.Element(RavenConnectionInfoKey);
             if (xe != null)
             {
                 var json = xe.Value;
-                var rvnConn = JsonConvert.DeserializeObject<RavenConnectionInfo>(json);
+                var rvnConn = JsonConvert.DeserializeObject<RavenConnectionDialogViewModel>(json);
                 rvnConn.CxInfo = cxInfo;
 
                 if (!rvnConn.Password.IsNullOrWhitespace())

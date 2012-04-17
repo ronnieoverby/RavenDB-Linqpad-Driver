@@ -2,7 +2,7 @@ RavenDB LINQPadDriver
 
 Yeah... a RavenDB driver for LINQPad.
 
-Uses RavenDB client build 701.
+Uses RavenDB client build 888.
 Referencing another version of the client in LINQPad SHOULD take precedence.
 
 Watch the video at http://youtu.be/XgsPvyk0bjM for help getting started.

@@ -8,7 +8,7 @@ namespace RavenLinqpadDriver
 {
     public class RavenDriver : StaticDataContextDriver
     {
-        RavenConnectionInfo _connInfo;
+        RavenConnectionDialogViewModel _connInfo;
 
         public override string Author
         {
@@ -17,7 +17,7 @@ namespace RavenLinqpadDriver
 
         public override string GetConnectionDescription(IConnectionInfo cxInfo)
         {
-            _connInfo = RavenConnectionInfo.Load(cxInfo);
+            _connInfo = RavenConnectionDialogViewModel.Load(cxInfo);
             return string.Format("RavenDB: {0}", _connInfo.Name);
         }
 
@@ -36,8 +36,8 @@ namespace RavenLinqpadDriver
         public override bool ShowConnectionDialog(IConnectionInfo cxInfo, bool isNewConnection)
         {
             _connInfo = isNewConnection
-                ? new RavenConnectionInfo { CxInfo = cxInfo }
-                : RavenConnectionInfo.Load(cxInfo);
+                ? new RavenConnectionDialogViewModel { CxInfo = cxInfo }
+                : RavenConnectionDialogViewModel.Load(cxInfo);
 
             var win = new RavenConectionDialog(_connInfo);
             var result = win.ShowDialog() == true;
@@ -54,14 +54,14 @@ namespace RavenLinqpadDriver
 
         public override ParameterDescriptor[] GetContextConstructorParameters(IConnectionInfo cxInfo)
         {
-            _connInfo = RavenConnectionInfo.Load(cxInfo);
+            _connInfo = RavenConnectionDialogViewModel.Load(cxInfo);
 
-            return new[] { new ParameterDescriptor("connInfo", "RavenLinqpadDriver.RavenConnectionInfo") };
+            return new[] { new ParameterDescriptor("connInfo", "RavenLinqpadDriver.RavenConnectionDialogViewModel") };
         }
 
         public override object[] GetContextConstructorArguments(IConnectionInfo cxInfo)
         {
-            _connInfo = RavenConnectionInfo.Load(cxInfo);
+            _connInfo = RavenConnectionDialogViewModel.Load(cxInfo);
             return new[] { _connInfo };
         }
 
@@ -118,7 +118,7 @@ namespace RavenLinqpadDriver
 
         public override void InitializeContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager)
         {
-            _connInfo = RavenConnectionInfo.Load(cxInfo);
+            _connInfo = RavenConnectionDialogViewModel.Load(cxInfo);
 
             var rc = context as RavenContext;
             rc.LogWriter = executionManager.SqlTranslationWriter;

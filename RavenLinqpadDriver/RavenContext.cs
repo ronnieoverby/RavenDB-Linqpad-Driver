@@ -10,6 +10,8 @@ using Raven.Client.Document;
 using Raven.Client.Indexes;
 using Raven.Client.Linq;
 using RavenLinqpadDriver.Bridge;
+using System.Reflection;
+using System.Net;
 
 namespace RavenLinqpadDriver
 {
@@ -26,7 +28,7 @@ namespace RavenLinqpadDriver
         }
         internal TextWriter LogWriter { get; set; }
 
-        public RavenContext(RavenConnectionInfo connInfo)
+        public RavenContext(RavenConnectionDialogViewModel connInfo)
         {
             if (connInfo == null)
                 throw new ArgumentNullException("conn", "conn is null.");
@@ -64,27 +66,42 @@ Result Data: {7}
                 e.Result)); // 7
         }
 
-        private void InitDocStore(RavenConnectionInfo conn)
+        private void InitDocStore(RavenConnectionDialogViewModel conn)
         {
             if (conn == null)
                 throw new ArgumentNullException("conn", "conn is null.");
 
-            _docStore = conn.CreateDocStore();
+            var assemblies = new List<Assembly>(new[] 
+            { 
+                this.GetType().Assembly
+            });
 
+            foreach (var path in conn.GetAssemblyPaths())
+                assemblies.Add(Assembly.LoadFrom(path));
 
-            // work on this!!!
-            //search for a user defined initializer
-            var refAssemblyNames = this.GetType().Assembly.GetReferencedAssemblies();
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var initType = (from a in assemblies
-                            //let a = Assembly.Load(an)
-                            from t in a.TypesImplementing<IConfigureDocumentStore>()
-                            select t).FirstOrDefault();
+            var docStoreCreatorType = (from a in assemblies
+                                       from t in a.TypesImplementing<ICreateDocumentStore>()
+                                       select t).FirstOrDefault();
 
-            if (initType != null)
+            if (docStoreCreatorType != null)
             {
-                var docStoreInit = (IConfigureDocumentStore)initType.CreateInstance();
-                docStoreInit.ConfigureDocumentStore(_docStore);
+                var docStoreCreator = (ICreateDocumentStore)docStoreCreatorType.CreateInstance();
+                _docStore = docStoreCreator.CreateDocumentStore(new ConnectionInfo
+                {
+                    Url = conn.Url,
+                    DefaultDatabase = conn.DefaultDatabase,
+                    Credentials = new NetworkCredential
+                    {
+                        UserName = conn.Username,
+                        Password = conn.Password
+                    },
+                    ResourceManagerId = conn.ResourceManagerId,
+                    //conn.ApiKey
+                });
+            }
+            else
+            {
+                _docStore = conn.CreateDocStore();
             }
 
             _docStore.Initialize();

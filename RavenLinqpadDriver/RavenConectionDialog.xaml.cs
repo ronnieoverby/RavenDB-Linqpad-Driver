@@ -5,9 +5,9 @@ namespace RavenLinqpadDriver
 {
     public partial class RavenConectionDialog : Window
     {
-        private RavenConnectionInfo _connInfo;
+        private RavenConnectionDialogViewModel _connInfo;
 
-        public RavenConectionDialog(RavenConnectionInfo conn)
+        public RavenConectionDialog(RavenConnectionDialogViewModel conn)
         {
             if (conn == null)
                 throw new ArgumentNullException("conn", "conn is null.");

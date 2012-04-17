@@ -51,10 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\RavenLinqpadDriver.Bridge\IConfigureDocumentStore.cs">
-      <Link>IConfigureDocumentStore.cs</Link>
+    <Compile Include="..\RavenLinqpadDriver.Bridge\ConnectionInfo.cs">
+      <Link>ConnectionInfo.cs</Link>
     </Compile>
-    <Compile Include="Class1.cs" />
+    <Compile Include="..\RavenLinqpadDriver.Bridge\ICreateDocumentStore.cs">
+      <Link>ICreateDocumentStore.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

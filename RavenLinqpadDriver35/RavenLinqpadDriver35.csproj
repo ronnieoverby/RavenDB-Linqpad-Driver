@@ -93,8 +93,8 @@
       <Link>RavenConectionDialog.xaml.cs</Link>
       <DependentUpon>RavenConectionDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="..\RavenLinqpadDriver\RavenConnectionInfo.cs">
-      <Link>RavenConnectionInfo.cs</Link>
+    <Compile Include="..\RavenLinqpadDriver\RavenConnectionDialogViewModel.cs">
+      <Link>RavenConnectionDialogViewModel.cs</Link>
     </Compile>
     <Compile Include="..\RavenLinqpadDriver\RavenContext.cs">
       <Link>RavenContext.cs</Link>

@@ -100,7 +100,7 @@
     <Compile Include="RavenConectionDialog.xaml.cs">
       <DependentUpon>RavenConectionDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RavenConnectionInfo.cs" />
+    <Compile Include="RavenConnectionDialogViewModel.cs" />
     <Compile Include="RavenContext.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
