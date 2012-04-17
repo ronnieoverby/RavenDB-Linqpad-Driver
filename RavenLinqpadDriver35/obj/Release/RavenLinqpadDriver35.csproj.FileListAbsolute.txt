@@ -3,7 +3,6 @@ C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\RavenLinqpadDriver35
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\RavenLinqpadDriver35.pdb
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\GalaSoft.MvvmLight.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\GalaSoft.MvvmLight.Extras.dll
-C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Newtonsoft.Json.Net35.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\NLog.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Raven.Abstractions-3.5.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Raven.Client.Lightweight-3.5.dll
@@ -21,3 +20,11 @@ C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenConectionDialog
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35.g.resources
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35.dll
 C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\obj\Release\RavenLinqpadDriver35.pdb
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Newtonsoft.Json.dll
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Newtonsoft.Json.pdb
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Newtonsoft.Json.xml
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\NLog.xml
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Raven.Abstractions-3.5.pdb
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Raven.Abstractions-3.5.xml
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Raven.Client.Lightweight-3.5.pdb
+C:\code\ravenLinqpadDriver\RavenLinqpadDriver35\bin\Release\Raven.Client.Lightweight-3.5.xml
