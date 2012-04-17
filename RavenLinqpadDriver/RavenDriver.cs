@@ -102,7 +102,8 @@ namespace RavenLinqpadDriver
                 "Raven.Client",
                 "Raven.Client.Document",
                 "Raven.Abstractions.Data",              
-                "Raven.Client.Linq"
+                "Raven.Client.Linq",
+                "RavenLinqpadDriver.Bridge"
             });
 
             if (_connInfo != null)
