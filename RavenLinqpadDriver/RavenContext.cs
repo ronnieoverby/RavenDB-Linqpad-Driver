@@ -15,7 +15,7 @@ using System.Net;
 
 namespace RavenLinqpadDriver
 {
-    public class RavenContext : IDocumentSession
+    public class RavenContext : IDocumentSession, IDocumentStore
     {
         private IDocumentStore _docStore;
         private IDocumentSession _session;
@@ -208,6 +208,112 @@ Result Data: {7}
             _session.Store(entity);
         }
 #endif
+
+        #endregion
+
+        #region IDocumentStore Members
+
+#if !NET35
+        public Raven.Client.Connection.Async.IAsyncDatabaseCommands AsyncDatabaseCommands
+        {
+            get { return _docStore.AsyncDatabaseCommands; }
+        }
+
+        public IAsyncDocumentSession OpenAsyncSession(string database)
+        {
+            return _docStore.OpenAsyncSession(database);
+        }
+
+        public IAsyncDocumentSession OpenAsyncSession()
+        {
+            return _docStore.OpenAsyncSession();
+        }
+#endif
+
+        public IDisposable AggressivelyCacheFor(TimeSpan cahceDuration)
+        {
+            return _docStore.AggressivelyCacheFor(cahceDuration);
+        }
+
+        public DocumentConvention Conventions
+        {
+            get { return _docStore.Conventions; }
+        }
+
+        public Raven.Client.Connection.IDatabaseCommands DatabaseCommands
+        {
+            get { return _docStore.DatabaseCommands; }
+        }
+
+        public IDisposable DisableAggressiveCaching()
+        {
+            return  _docStore.DisableAggressiveCaching();
+        }
+
+        public void ExecuteIndex(AbstractIndexCreationTask indexCreationTask)
+        {
+            _docStore.ExecuteIndex(indexCreationTask);
+        }
+
+        public Guid? GetLastWrittenEtag()
+        {
+            return _docStore.GetLastWrittenEtag();
+        }
+
+        public string Identifier
+        {
+            get
+            {
+                return _docStore.Identifier;
+            }
+            set
+            {
+                _docStore.Identifier = value;
+            }
+        }
+
+        public IDocumentStore Initialize()
+        {
+            // already initialized
+            return this;
+        }
+
+        public Raven.Client.Connection.HttpJsonRequestFactory JsonRequestFactory
+        {
+            get { return _docStore.JsonRequestFactory; }
+        }
+
+        public IDocumentSession OpenSession(OpenSessionOptions sessionOptions)
+        {
+            return _docStore.OpenSession(sessionOptions);
+        }
+
+        public IDocumentSession OpenSession(string database)
+        {
+            return _docStore.OpenSession(database);
+        }
+
+        public IDocumentSession OpenSession()
+        {
+            return _docStore.OpenSession();
+        }
+
+        public System.Collections.Specialized.NameValueCollection SharedOperationsHeaders
+        {
+            get { return _docStore.SharedOperationsHeaders; }
+        }
+
+        public string Url
+        {
+            get { return _docStore.Url; }
+        }
+
+        public event EventHandler AfterDispose;
+
+        public bool WasDisposed
+        {
+            get { return _docStore.WasDisposed; }
+        } 
 
         #endregion
     }

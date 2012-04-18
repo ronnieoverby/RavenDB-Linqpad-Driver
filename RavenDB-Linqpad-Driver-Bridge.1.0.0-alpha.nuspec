@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <version>1.0.0-alpha</version>
+    <authors>Ronnie Overby</authors>
+    <owners />
+    <projectUrl>https://github.com/ronnieoverby/RavenDB-Linqpad-Driver</projectUrl>
+    <dependencies>
+      <dependency id="RavenDB-Client" version="1.0.888" />
+    </dependencies>
+    <id>RavenDB-Linqpad-Driver-Bridge</id>
+    <title>RavenDB Linqpad Driver Application Bridge</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The RavenDB Linqpad Driver makes it easy to work with a RavenDB database when executing adhoc queries or performing maintenance tasks. 
+
+However, if your application doesn't use a trivial DocumentStore, then you'll need to inform the RavenDB Linqpad Driver of how the IDocumentStore needs to be created. 
+
+This package provides the interface ICreateDocumentStore. When implemented the RavenDB Linqpad Driver will use for IDocumentStore creation.
+
+For more information, please visit this package's project URL.</description>
+    <summary>Helps your application work with the RavenDB Linqpad Driver.</summary>
+  </metadata>
+  <files>
+    <file src="lib\net35\RavenLinqpadDriver.Bridge35.dll" target="lib\net35\RavenLinqpadDriver.Bridge35.dll" />
+    <file src="lib\net40\RavenLinqpadDriver.Bridge.dll" target="lib\net40\RavenLinqpadDriver.Bridge.dll" />
+  </files>
+</package>
