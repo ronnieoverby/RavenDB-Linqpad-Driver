@@ -197,6 +197,12 @@ Result Data: {7}
         {
             Session.Store(entity);
         }
+
+        public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
+        {
+            return Session.Include<T, TInclude>(path);
+        }
+
 #else
         public void Store(object entity, string id)
         {
