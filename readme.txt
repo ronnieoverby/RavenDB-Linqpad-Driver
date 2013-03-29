@@ -1,6 +1,6 @@
 RavenDB LINQPadDriver
 
-The latest release uses RavenDB client build 2330 and can be downloaded at https://dl.dropbox.com/u/1563210/software%20releases/RavenLinqpadDriver%200.4.2330.0.zip
+The latest release uses RavenDB client build 2330 and can be downloaded at http://goo.gl/T5hfm
 
 Referencing another version of the client in LINQPad SHOULD take precedence.
 
