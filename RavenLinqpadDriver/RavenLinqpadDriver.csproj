@@ -108,6 +108,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\readme.txt">
+      <Link>readme.txt</Link>
+    </Content>
     <Content Include="Connection.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

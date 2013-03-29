@@ -1,6 +1,8 @@
 RavenDB LINQPadDriver
 
-The latest release uses RavenDB client build 2330 and can be downloaded at http://goo.gl/T5hfm
+Releases are hosted on SourceForge: https://sourceforge.net/projects/ravendblinqpad/
+
+The latest release uses RavenDB client build 2330.
 
 Referencing another version of the client in LINQPad SHOULD take precedence.
 
