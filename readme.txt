@@ -8,7 +8,7 @@ Referencing another version of the client in LINQPad SHOULD take precedence.
 
 Watch the video at http://youtu.be/XgsPvyk0bjM for help getting started.
 
-=========
+---------------------
 
 To install:
 
@@ -29,7 +29,7 @@ from a in Query<Album>()
 where a.Title.StartsWith("Classic")
 select a
 
-=========
+---------------------
 
 The RavenDB Linqpad Driver will create a DocumentStore for you to use to connect to RavenDB.
 It uses the details that you supply in the connection properties window inside Linqpad.
