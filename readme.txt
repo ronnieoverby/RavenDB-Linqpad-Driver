@@ -1,6 +1,7 @@
 RavenDB LINQPadDriver
 
-Uses RavenDB client build 2330.
+The latest release uses RavenDB client build 2330 and can be downloaded at https://dl.dropbox.com/u/1563210/software%20releases/RavenLinqpadDriver%200.4.2330.0.zip
+
 Referencing another version of the client in LINQPad SHOULD take precedence.
 
 Watch the video at http://youtu.be/XgsPvyk0bjM for help getting started.
@@ -25,3 +26,17 @@ To install:
 from a in Query<Album>()
 where a.Title.StartsWith("Classic")
 select a
+
+=========
+
+The RavenDB Linqpad Driver will create a DocumentStore for you to use to connect to RavenDB.
+It uses the details that you supply in the connection properties window inside Linqpad.
+If you need to fully control the creation of the IDocumentStore (for sharding, etc) you can do it:
+
+1) In your project, add a reference to RavenLinqpadDriver.Common.dll (can be found in /Common)
+
+2) Implement ICreateDocumentStore
+
+3) In Linqpad's RavenDB connection properties, reference your project's assembly.
+
+4) When you run queries under that Linqpad connection, you're custom IDocumentStore will be used.
