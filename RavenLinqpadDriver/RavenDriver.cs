@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using LINQPad.Extensibility.DataContext;
 
@@ -25,11 +24,7 @@ namespace RavenLinqpadDriver
         {
             get
             {
-#if NET35
-                return "RavenDB Driver (.NET 3.5)"; 
-#else
                 return "RavenDB Driver";
-#endif
             }
         }
 
@@ -62,40 +57,25 @@ namespace RavenLinqpadDriver
         public override object[] GetContextConstructorArguments(IConnectionInfo cxInfo)
         {
             _connInfo = RavenConnectionDialogViewModel.Load(cxInfo);
+// ReSharper disable CoVariantArrayConversion
             return new[] { _connInfo };
+// ReSharper restore CoVariantArrayConversion
         }
 
-        public override IEnumerable<string> GetAssembliesToAdd()
+        public override IEnumerable<string> GetAssembliesToAdd(IConnectionInfo cxInfo)
         {
-            var assemblies = new[] { 
-                "NLog.dll",
-                "Newtonsoft.Json.dll",
-#if NET35
-                "Raven.Client.Lightweight-3.5.dll",
-                "Raven.Abstractions-3.5.dll"
-#else
-                "Raven.Client.Lightweight.dll",
-                "Raven.Abstractions.dll"
-#endif
-            }.ToList();
-
-            if (_connInfo != null)
-            {
-                assemblies.AddRange(_connInfo.GetAssemblyPaths());
-            }
-
-            return assemblies;
+            // load user's assemblies
+            return _connInfo.GetAssemblyPaths();
         }
 
-        public override IEnumerable<string> GetNamespacesToRemove()
+        public override IEnumerable<string> GetNamespacesToRemove(IConnectionInfo cxInfo)
         {
-            // linqpad uses System.Data.Linq by default, which isn't needed
-            return new[] { "System.Data.Linq" };
+            return new[] {"System.Data.Linq", "System.Data.Linq.SqlClient"};
         }
 
-        public override IEnumerable<string> GetNamespacesToAdd()
+        public override IEnumerable<string> GetNamespacesToAdd(IConnectionInfo cxInfo)
         {
-            var namespaces = new List<String>(base.GetNamespacesToAdd());
+            var namespaces = new List<String>(base.GetNamespacesToAdd(cxInfo));
 
             namespaces.AddRange(new[] 
             {
@@ -103,7 +83,7 @@ namespace RavenLinqpadDriver
                 "Raven.Client.Document",
                 "Raven.Abstractions.Data",              
                 "Raven.Client.Linq",
-                "RavenLinqpadDriver.Bridge"
+                "RavenLinqpadDriver.Common"
             });
 
             if (_connInfo != null)
@@ -121,15 +101,8 @@ namespace RavenLinqpadDriver
         {
             _connInfo = RavenConnectionDialogViewModel.Load(cxInfo);
 
-            var rc = context as RavenContext;
+            var rc = (RavenContext) context;
             rc.LogWriter = executionManager.SqlTranslationWriter;
-
-            // load user's assemblies
-
-            // this looks like it's linqpad beta only, so load in GetAssembliesToAdd until 
-            // this method is available in the release version of linqpad, damnit
-            // foreach (var assembly in _connInfo.GetAssemblyPaths())
-            //    LoadAssemblySafely(assembly);
         }
 
         public override void TearDownContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager, object[] constructorArguments)

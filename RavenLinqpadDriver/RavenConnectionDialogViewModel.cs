@@ -3,17 +3,15 @@ using System.Net;
 using System.Xml.Linq;
 using System.Linq;
 using LINQPad.Extensibility.DataContext;
-using Newtonsoft.Json;
 using Raven.Client.Document;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Windows;
+using Raven.Imports.Newtonsoft.Json;
 
 namespace RavenLinqpadDriver
 {
@@ -278,28 +276,16 @@ namespace RavenLinqpadDriver
 
         public IEnumerable<string> GetAssemblyPaths()
         {
-            if (AssemblyPaths.IsNullOrWhitespace())
-                yield break;
-
-            var paths = AssemblyPaths
-                .Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+            return (AssemblyPaths ?? "")
+                .Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim());
-
-            foreach (var path in paths)
-                yield return path;
         }
 
         public IEnumerable<string> GetNamespaces()
         {
-            if (Namespaces.IsNullOrWhitespace())
-                yield break;
-
-            var namespaces = Namespaces
-                .Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+            return (Namespaces ?? "")
+                .Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim());
-
-            foreach (var ns in namespaces)
-                yield return ns;
         }
 
         public static RavenConnectionDialogViewModel Load(IConnectionInfo cxInfo)

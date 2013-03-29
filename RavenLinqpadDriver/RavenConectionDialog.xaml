@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:RavenLinqpadDriver"
-             mc:Ignorable="d" Title="RavenDB Connection" Height="375" Width="574">
+             mc:Ignorable="d" Title="RavenDB Connection" Height="474" Width="616">
 
     <Window.Resources>
         <local:GuidValueConverter x:Key="guidConverter"/>
@@ -41,11 +41,11 @@
         <TextBlock Grid.Row="5"  Text="Username" Margin="6" VerticalAlignment="Center" />
         <TextBlock Grid.Row="6"  Text="Password" Margin="6" VerticalAlignment="Center" />
 
-        <TextBlock Grid.Row="7" Text="Assembly Paths (comma seperated)" Margin="6" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Name="txtAssemblyPaths" Margin="6" Grid.Row="7" Text="{Binding AssemblyPaths, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="7" Text="Assembly Paths (line seperated)" Margin="6" VerticalAlignment="Top" />
+        <TextBox Grid.Column="1" Name="txtAssemblyPaths" Height="80" Margin="6" Grid.Row="7" Text="{Binding AssemblyPaths, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
 
-        <TextBlock Grid.Row="8" Text="Namespaces (comma seperated)" Margin="6" VerticalAlignment="Center" />
-        <TextBox Grid.Column="1" Name="txtNamespaces" Margin="6" Grid.Row="8" Text="{Binding Namespaces, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" />
+        <TextBlock Grid.Row="8" Text="Namespaces (line seperated)" Margin="6" VerticalAlignment="Top" />
+        <TextBox Grid.Column="1" Name="txtNamespaces" Height="80" AcceptsReturn="True" Margin="6" Grid.Row="8" Text="{Binding Namespaces, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
 
         <TextBlock Grid.Row="3" Text="API Key" Margin="6" VerticalAlignment="Center" />
         <TextBox Grid.Column="1" Name="txtAPIKey" Margin="6" Grid.Row="3" Text="{Binding ApiKey, Mode=TwoWay, ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" />

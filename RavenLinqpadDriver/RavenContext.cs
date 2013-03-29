@@ -4,50 +4,45 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using Fasterflect;
+using Raven.Abstractions.Data;
 using Raven.Client;
+using Raven.Client.Changes;
 using Raven.Client.Connection.Profiling;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
 using Raven.Client.Linq;
-using RavenLinqpadDriver.Bridge;
 using System.Reflection;
 using System.Net;
+using RavenLinqpadDriver.Common;
 
 namespace RavenLinqpadDriver
 {
     public class RavenContext : IDocumentSession, IDocumentStore
     {
         private IDocumentStore _docStore;
-        private IDocumentSession _session;
-        private IDocumentSession Session
-        {
-            get
-            {
-                return _session ?? (_session = _docStore.OpenSession());
-            }
-        }
+        private readonly Lazy<IDocumentSession> _lazySession;
+
         internal TextWriter LogWriter { get; set; }
 
         public RavenContext(RavenConnectionDialogViewModel connInfo)
         {
-            if (connInfo == null)
-                throw new ArgumentNullException("conn", "conn is null.");
-
+            if (connInfo == null) throw new ArgumentNullException("connInfo");
+            
             InitDocStore(connInfo);
+            _lazySession = new Lazy<IDocumentSession>(_docStore.OpenSession);
             SetupLogWriting();
         }
 
-
         private void SetupLogWriting()
         {
-            _docStore.JsonRequestFactory.LogRequest += new EventHandler<RequestResultArgs>(LogRequest);
+            _docStore.JsonRequestFactory.LogRequest += LogRequest;
         }
 
         void LogRequest(object sender, RequestResultArgs e)
         {
             if (LogWriter == null) return;
 
-            LogWriter.WriteLine(string.Format(@"
+            LogWriter.WriteLine(@"
 {0} - {1}
 Url: {2}
 Duration: {3} milliseconds
@@ -56,14 +51,14 @@ Posted Data: {5}
 Http Result: {6}
 Result Data: {7}
 ",
-                e.At, // 0
-                e.Status, // 1
-                e.Url, // 2
-                e.DurationMilliseconds, // 3
-                e.Method, // 4
-                e.PostedData, // 5
-                e.HttpResult, // 6
-                e.Result)); // 7
+                                e.At, // 0
+                                e.Status, // 1
+                                e.Url, // 2
+                                e.DurationMilliseconds, // 3
+                                e.Method, // 4
+                                e.PostedData, // 5
+                                e.HttpResult, // 6
+                                e.Result); // 7
         }
 
         private void InitDocStore(RavenConnectionDialogViewModel conn)
@@ -71,13 +66,9 @@ Result Data: {7}
             if (conn == null)
                 throw new ArgumentNullException("conn", "conn is null.");
 
-            var assemblies = new List<Assembly>(new[] 
-            { 
-                this.GetType().Assembly
-            });
 
-            foreach (var path in conn.GetAssemblyPaths())
-                assemblies.Add(Assembly.LoadFrom(path));
+
+            var assemblies = conn.GetAssemblyPaths().Select(Path.GetFileNameWithoutExtension).Select(Assembly.Load);
 
             var docStoreCreatorType = (from a in assemblies
                                        from t in a.TypesImplementing<ICreateDocumentStore>()
@@ -109,8 +100,8 @@ Result Data: {7}
 
         public void Dispose()
         {
-            if (_session != null)
-                _session.Dispose();
+            if (_lazySession.IsValueCreated)
+                _lazySession.Value.Dispose();
 
             if (_docStore != null && !_docStore.WasDisposed)
                 _docStore.Dispose();
@@ -119,107 +110,111 @@ Result Data: {7}
         #region IDocumentSession Members
         public ISyncAdvancedSessionOperation Advanced
         {
-            get { return Session.Advanced; }
+            get { return _lazySession.Value.Advanced; }
         }
 
         public void Delete<T>(T entity)
         {
-            Session.Delete<T>(entity);
+            _lazySession.Value.Delete(entity);
         }
 
         public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
         {
-            return Session.Include<T>(path);
+            return _lazySession.Value.Include(path);
         }
 
         public ILoaderWithInclude<object> Include(string path)
         {
-            return Session.Include(path);
+            return _lazySession.Value.Include(path);
         }
 
         public T Load<T>(ValueType id)
         {
-            return Session.Load<T>(id);
+            return _lazySession.Value.Load<T>(id);
+        }
+
+        public T[] Load<T>(params ValueType[] ids)
+        {
+            return _lazySession.Value.Load<T>(ids);
+        }
+
+        public T[] Load<T>(IEnumerable<ValueType> ids)
+        {
+            return _lazySession.Value.Load<T>(ids);
+        }
+
+// ReSharper disable MethodOverloadWithOptionalParameter
+        public IRavenQueryable<T> Query<T>(string indexName, bool isMapReduce = false)
+// ReSharper restore MethodOverloadWithOptionalParameter
+        {
+            return _lazySession.Value.Query<T>(indexName, isMapReduce);
         }
 
         public T[] Load<T>(IEnumerable<string> ids)
         {
-            return Session.Load<T>(ids);
+            return _lazySession.Value.Load<T>(ids);
         }
 
         public T[] Load<T>(params string[] ids)
         {
-            return Session.Load<T>(ids);
+            return _lazySession.Value.Load<T>(ids);
         }
 
         public T Load<T>(string id)
         {
-            return Session.Load<T>(id);
+            return _lazySession.Value.Load<T>(id);
         }
 
         public IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new()
         {
-            return Session.Query<T, TIndexCreator>();
+            return _lazySession.Value.Query<T, TIndexCreator>();
         }
 
         public IRavenQueryable<T> Query<T>()
         {
-            return Session.Query<T>();
+            return _lazySession.Value.Query<T>();
         }
 
         public IRavenQueryable<T> Query<T>(string indexName)
         {
-            return Session.Query<T>(indexName);
+            return _lazySession.Value.Query<T>(indexName);
         }
 
         public void SaveChanges()
         {
-            Session.SaveChanges();
+            _lazySession.Value.SaveChanges();
         }
 
         public void Store(object entity, Guid etag, string id)
         {
-            Session.Store(entity, etag, id);
+            _lazySession.Value.Store(entity, etag, id);
         }
 
         public void Store(object entity, Guid etag)
         {
-            Session.Store(entity, etag);
+            _lazySession.Value.Store(entity, etag);
         }
 
-#if !NET35
+
         public void Store(dynamic entity, string id)
         {
-            Session.Store(entity, id);
+            _lazySession.Value.Store(entity, id);
         }
 
         public void Store(dynamic entity)
         {
-            Session.Store(entity);
+            _lazySession.Value.Store(entity);
         }
 
         public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
         {
-            return Session.Include<T, TInclude>(path);
+            return _lazySession.Value.Include<T, TInclude>(path);
         }
-
-#else
-        public void Store(object entity, string id)
-        {
-            _session.Store(entity, id);
-        }
-
-        public void Store(object entity)
-        {
-            _session.Store(entity);
-        }
-#endif
 
         #endregion
 
         #region IDocumentStore Members
 
-#if !NET35
         public Raven.Client.Connection.Async.IAsyncDatabaseCommands AsyncDatabaseCommands
         {
             get { return _docStore.AsyncDatabaseCommands; }
@@ -234,7 +229,11 @@ Result Data: {7}
         {
             return _docStore.OpenAsyncSession();
         }
-#endif
+
+        public IDatabaseChanges Changes(string database = null)
+        {
+            return _docStore.Changes(database);
+        }
 
         public IDisposable AggressivelyCacheFor(TimeSpan cahceDuration)
         {
@@ -264,6 +263,11 @@ Result Data: {7}
         public Guid? GetLastWrittenEtag()
         {
             return _docStore.GetLastWrittenEtag();
+        }
+
+        public BulkInsertOperation BulkInsert(string database = null, BulkInsertOptions options = null)
+        {
+            return _docStore.BulkInsert(database, options);
         }
 
         public string Identifier
