@@ -13,6 +13,7 @@ using Raven.Client.Indexes;
 using Raven.Client.Linq;
 using System.Reflection;
 using System.Net;
+using Raven.Client.Shard;
 using RavenLinqpadDriver.Common;
 
 namespace RavenLinqpadDriver
@@ -27,7 +28,7 @@ namespace RavenLinqpadDriver
         public RavenContext(RavenConnectionDialogViewModel connInfo)
         {
             if (connInfo == null) throw new ArgumentNullException("connInfo");
-            
+
             InitDocStore(connInfo);
             _lazySession = new Lazy<IDocumentSession>(_docStore.OpenSession);
             SetupLogWriting();
@@ -35,7 +36,22 @@ namespace RavenLinqpadDriver
 
         private void SetupLogWriting()
         {
-            _docStore.JsonRequestFactory.LogRequest += LogRequest;
+            // sharded doc stores don't have a jsonrequestfactory,
+            // so if sharding, get shard doc stores
+            var shardedDocStore = _docStore as ShardedDocumentStore;
+            if (shardedDocStore != null)
+            {
+                var docStores = from ds in shardedDocStore.ShardStrategy.Shards.Values
+                                where !(ds is ShardedDocumentStore)
+                                select ds;
+
+                foreach (var docStore in docStores)
+                    docStore.JsonRequestFactory.LogRequest += LogRequest;
+            }
+            else
+            {
+                _docStore.JsonRequestFactory.LogRequest += LogRequest;
+            }
         }
 
         void LogRequest(object sender, RequestResultArgs e)
@@ -143,9 +159,9 @@ Result Data: {7}
             return _lazySession.Value.Load<T>(ids);
         }
 
-// ReSharper disable MethodOverloadWithOptionalParameter
+        // ReSharper disable MethodOverloadWithOptionalParameter
         public IRavenQueryable<T> Query<T>(string indexName, bool isMapReduce = false)
-// ReSharper restore MethodOverloadWithOptionalParameter
+        // ReSharper restore MethodOverloadWithOptionalParameter
         {
             return _lazySession.Value.Query<T>(indexName, isMapReduce);
         }
@@ -252,7 +268,7 @@ Result Data: {7}
 
         public IDisposable DisableAggressiveCaching()
         {
-            return  _docStore.DisableAggressiveCaching();
+            return _docStore.DisableAggressiveCaching();
         }
 
         public void ExecuteIndex(AbstractIndexCreationTask indexCreationTask)
@@ -323,7 +339,7 @@ Result Data: {7}
         public bool WasDisposed
         {
             get { return _docStore.WasDisposed; }
-        } 
+        }
 
         #endregion
     }
