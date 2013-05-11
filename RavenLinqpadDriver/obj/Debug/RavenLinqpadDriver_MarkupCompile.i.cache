@@ -4,7 +4,7 @@
 library
 C#
 .cs
-Z:\code\RavenDB-Linqpad-Driver\RavenLinqpadDriver\obj\Debug\
+D:\code\RavenDB-Linqpad-Driver\RavenLinqpadDriver\obj\Debug\
 RavenLinqpadDriver
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 2-629771635
 4643572905
 11-475558720
-23-671478767
+23-1757976617
 App.xaml;RavenConectionDialog.xaml;
 
 False
