@@ -37,7 +37,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>RavenLinqpadDriverStrongNameKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>RavenLinqpadDriverStrongNameKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.5' ">$(DefineConstants);NET35</DefineConstants>
@@ -102,8 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="RavenLinqpadDriverStrongNameKey.pfx" />
-    <None Include="SigningCert.pfx" />
+    <None Include="RavenLinqpadDriverStrongNameKey.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\readme.txt">

@@ -20,8 +20,10 @@ namespace RavenLinqpadDriver
 {
     public class RavenContext : IDocumentSession, IDocumentStore
     {
+        // ReSharper disable InconsistentNaming
         private IDocumentStore _docStore;
         private readonly Lazy<IDocumentSession> _lazySession;
+        // ReSharper restore InconsistentNaming
 
         internal TextWriter LogWriter { get; set; }
 
@@ -196,17 +198,23 @@ Result Data: {7}
             return _lazySession.Value.Query<T>(indexName);
         }
 
+        public TResult[] Load<TTransformer, TResult>(IEnumerable<string> ids, Action<ILoadConfiguration> configure) where TTransformer : AbstractTransformerCreationTask, new()
+        {
+            return _lazySession.Value.Load<TTransformer, TResult>(ids, configure);
+
+        }
+
         public void SaveChanges()
         {
             _lazySession.Value.SaveChanges();
         }
 
-        public void Store(object entity, Guid etag, string id)
+        public void Store(object entity, Etag etag, string id)
         {
             _lazySession.Value.Store(entity, etag, id);
         }
 
-        public void Store(object entity, Guid etag)
+        public void Store(object entity, Etag etag)
         {
             _lazySession.Value.Store(entity, etag);
         }
@@ -225,6 +233,21 @@ Result Data: {7}
         public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
         {
             return _lazySession.Value.Include<T, TInclude>(path);
+        }
+
+        public TResult Load<TTransformer, TResult>(string id) where TTransformer : AbstractTransformerCreationTask, new()
+        {
+            return _lazySession.Value.Load<TTransformer, TResult>(id);
+        }
+
+        public TResult Load<TTransformer, TResult>(string id, Action<ILoadConfiguration> configure) where TTransformer : AbstractTransformerCreationTask, new()
+        {
+            return _lazySession.Value.Load<TTransformer, TResult>(id, configure);
+        }
+
+        public TResult[] Load<TTransformer, TResult>(params string[] ids) where TTransformer : AbstractTransformerCreationTask, new()
+        {
+            return _lazySession.Value.Load<TTransformer, TResult>(ids);
         }
 
         #endregion
@@ -256,6 +279,11 @@ Result Data: {7}
             return _docStore.AggressivelyCacheFor(cahceDuration);
         }
 
+        public IDisposable AggressivelyCache()
+        {
+            return _docStore.AggressivelyCache();
+        }
+
         public DocumentConvention Conventions
         {
             get { return _docStore.Conventions; }
@@ -276,7 +304,12 @@ Result Data: {7}
             _docStore.ExecuteIndex(indexCreationTask);
         }
 
-        public Guid? GetLastWrittenEtag()
+        public void ExecuteTransformer(AbstractTransformerCreationTask transformerCreationTask)
+        {
+            _docStore.ExecuteTransformer(transformerCreationTask);
+        }
+
+        public Etag GetLastWrittenEtag()
         {
             return _docStore.GetLastWrittenEtag();
         }
