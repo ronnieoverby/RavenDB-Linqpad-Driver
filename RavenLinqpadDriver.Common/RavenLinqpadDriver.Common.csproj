@@ -34,7 +34,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>RavenLinqpadDriverStrongNameKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>RavenLinqpadDriverStrongNameKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Raven.Client.Lightweight">
@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="RavenLinqpadDriverStrongNameKey.pfx" />
+    <None Include="RavenLinqpadDriverStrongNameKey.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
