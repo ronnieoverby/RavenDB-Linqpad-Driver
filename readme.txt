@@ -1,6 +1,6 @@
 RavenDB LINQPadDriver
 
-Releases are hosted on SourceForge: https://sourceforge.net/projects/ravendblinqpad/
+Releases are hosted on Github: https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/releases
 
 The latest release uses RavenDB client build 2700.
 
