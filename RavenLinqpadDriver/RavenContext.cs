@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using Fasterflect;
 using Raven.Abstractions.Data;
 using Raven.Client;
@@ -60,7 +61,7 @@ namespace RavenLinqpadDriver
         {
             if (LogWriter == null) return;
 
-            LogWriter.WriteLine(@"
+            var entry = new StringBuilder().AppendFormat(@"
 {0} - {1}
 Url: {2}
 Duration: {3} milliseconds
@@ -68,15 +69,22 @@ Method: {4}
 Posted Data: {5}
 Http Result: {6}
 Result Data: {7}
-",
-                                e.At, // 0
-                                e.Status, // 1
-                                e.Url, // 2
-                                e.DurationMilliseconds, // 3
-                                e.Method, // 4
-                                e.PostedData, // 5
-                                e.HttpResult, // 6
-                                e.Result); // 7
+Total Size: {8:n0}",
+                e.At,
+                e.Status,
+                e.Url,
+                e.DurationMilliseconds,
+                e.Method,
+                e.PostedData,
+                e.HttpResult,
+                e.Result,
+                e.TotalSize);
+
+            foreach (var item in e.AdditionalInformation)
+                entry.AppendFormat("{0}: {1}", item.Key, item.Value);
+
+            entry.AppendLine();
+            LogWriter.WriteLine(entry.ToString());
         }
 
         private void InitDocStore(RavenConnectionDialogViewModel conn)
@@ -86,7 +94,7 @@ Result Data: {7}
 
 
 
-            var assemblies = conn.GetAssemblyPaths().Select(Path.GetFileNameWithoutExtension).Select(Assembly.Load);
+            var assemblies = conn.AssemblyPaths.Select(Path.GetFileNameWithoutExtension).Select(Assembly.Load);
 
             var docStoreCreatorType = (from a in assemblies
                                        from t in a.TypesImplementing<ICreateDocumentStore>()
@@ -94,7 +102,7 @@ Result Data: {7}
 
             if (docStoreCreatorType != null)
             {
-                var docStoreCreator = (ICreateDocumentStore)docStoreCreatorType.CreateInstance();
+                var docStoreCreator = (ICreateDocumentStore)ConstructorExtensions.CreateInstance(docStoreCreatorType);
                 _docStore = docStoreCreator.CreateDocumentStore(new ConnectionInfo
                 {
                     Url = conn.Url,

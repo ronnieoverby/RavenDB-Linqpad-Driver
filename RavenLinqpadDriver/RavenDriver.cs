@@ -65,7 +65,7 @@ namespace RavenLinqpadDriver
         public override IEnumerable<string> GetAssembliesToAdd(IConnectionInfo cxInfo)
         {
             // load user's assemblies
-            return _connInfo.GetAssemblyPaths();
+            return _connInfo.AssemblyPaths;
         }
 
         public override IEnumerable<string> GetNamespacesToRemove(IConnectionInfo cxInfo)

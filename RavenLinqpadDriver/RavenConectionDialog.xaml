@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:RavenLinqpadDriver"
-             mc:Ignorable="d" Title="RavenDB Connection" Height="474" Width="616">
+             mc:Ignorable="d" Title="RavenDB Connection" Height="508.328" Width="616">
 
     <Window.Resources>
-        <local:GuidValueConverter x:Key="guidConverter"/>
+        <local:GuidValueConverter x:Key="GuidConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -33,7 +33,7 @@
         <TextBlock  Grid.Row="1" Text="URL *" Margin="6" VerticalAlignment="Center" />
         <TextBox Grid.Column="1" Name="txtUrl" Margin="6" Grid.Row="1" Text="{Binding Url, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" />
         <TextBox Grid.Column="1" Grid.Row="2" Name="txtDatabase" Margin="6" Text="{Binding DefaultDatabase, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True}" />
-        <TextBox Grid.Column="1" Grid.Row="4" Name="txtResourceManagerId" Margin="6" Text="{Binding ResourceManagerId,Converter={StaticResource guidConverter}, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True}" />
+        <TextBox Grid.Column="1" Grid.Row="4" Name="txtResourceManagerId" Margin="6" Text="{Binding ResourceManagerId,Converter={StaticResource GuidConverter}, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True}" />
         <TextBox Grid.Column="1" Grid.Row="5" Name="txtUsername" Margin="6" Text="{Binding Username, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True}" />
         <PasswordBox Grid.Column="1" Grid.Row="6" Name="txtPassword" Margin="6" PasswordChanged="txtPassword_PasswordChanged" />
         <TextBlock Grid.Row="2"  Text="Database" Margin="6" VerticalAlignment="Center" />
@@ -41,8 +41,15 @@
         <TextBlock Grid.Row="5"  Text="Username" Margin="6" VerticalAlignment="Center" />
         <TextBlock Grid.Row="6"  Text="Password" Margin="6" VerticalAlignment="Center" />
 
-        <TextBlock Grid.Row="7" Text="Assembly Paths (line seperated)" Margin="6" VerticalAlignment="Top" />
-        <TextBox Grid.Column="1" Name="txtAssemblyPaths" Height="80" Margin="6" Grid.Row="7" Text="{Binding AssemblyPaths, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+        <TextBlock Grid.Row="7" Text="Assembly Paths" Margin="6" VerticalAlignment="Top" />
+        <StackPanel Grid.Column="1" Grid.Row="7">
+            <ListBox Height="80" ItemsSource="{Binding AssemblyPaths, Mode=TwoWay}" SelectedItem="{Binding SelectedAssemblyPath, Mode=TwoWay}" Margin="6" />
+            <UniformGrid>
+            <Button Command="{Binding RemoveAssemblyCommand}" Content="Remove"  HorizontalAlignment="Left" Margin="6,0" />
+                <Button Command="{Binding BrowseAssembliesCommand}" Content="Browse" HorizontalAlignment="Right"  Margin="6,0" />
+                <TextBlock></TextBlock>
+            </UniformGrid>
+        </StackPanel>
 
         <TextBlock Grid.Row="8" Text="Namespaces (line seperated)" Margin="6" VerticalAlignment="Top" />
         <TextBox Grid.Column="1" Name="txtNamespaces" Height="80" AcceptsReturn="True" Margin="6" Grid.Row="8" Text="{Binding Namespaces, Mode=TwoWay,ValidatesOnDataErrors=True,ValidatesOnExceptions=True,NotifyOnValidationError=True,UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />

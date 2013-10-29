@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Net;
-using System.Xml.Linq;
-using System.Linq;
-using LINQPad.Extensibility.DataContext;
-using Raven.Client.Document;
-using System.ComponentModel.DataAnnotations;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System.IO;
-using System.Reflection;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Windows;
+using System.Xml.Linq;
+using LINQPad.Extensibility.DataContext;
+using Microsoft.Win32;
+using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 
 namespace RavenLinqpadDriver
@@ -19,21 +19,53 @@ namespace RavenLinqpadDriver
     {
         public const string RavenConnectionInfoKey = "RavenConnectionInfo";
 
+        public const string NamePropertyName = "Name";
+
+        public const string UrlPropertyName = "Url";
+
+        public const string DefaultDatabasePropertyName = "DefaultDatabase";
+
+        public const string ApiKeyPropertyName = "ApiKey";
+
+        public const string ResourceManagerIdPropertyName = "ResourceManagerId";
+
+        public const string UsernamePropertyName = "Username";
+
+        public const string PasswordPropertyName = "Password";
+        public const string NamespacesPropertyName = "Namespaces";
+        private string _apiKey;
+        private string _defaultDatabase;
+        private string _name;
+        private string _namespaces;
+        private string _password;
+        private Guid? _resourceManagerId;
+        private string _url = "http://localhost:8080";
+        private string _username;
+        private string _selectedAssemblyPath;
+
+        public RavenConnectionDialogViewModel()
+        {
+            AssemblyPaths = new BindingList<string>();
+            SaveCommand = new RelayCommand(Save, CanSave);
+            BrowseAssembliesCommand = new RelayCommand(BrowseAssemblies);
+            RemoveAssemblyCommand = new RelayCommand(RemoveAssembly,CanRemoveAssembly);
+        }
+
+        private bool CanRemoveAssembly()
+        {
+            return !string.IsNullOrWhiteSpace(SelectedAssemblyPath);
+        }
+
         [JsonIgnore]
         public IConnectionInfo CxInfo { get; set; }
 
         [JsonIgnore]
         public RelayCommand SaveCommand { get; set; }
 
-        public const string NamePropertyName = "Name";
-        private string _name = null;
         [Required]
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get { return _name; }
 
             set
             {
@@ -44,19 +76,15 @@ namespace RavenLinqpadDriver
 
                 _name = value;
 
-                RaisePropertyChanged(NamePropertyName);
+                OnPropertyChanged(NamePropertyName);
+                SaveCommand.OnCanExecuteChanged();
             }
         }
 
-        public const string UrlPropertyName = "Url";
-        private string _url = "http://localhost:8080";
         [Required]
         public string Url
         {
-            get
-            {
-                return _url;
-            }
+            get { return _url; }
 
             set
             {
@@ -67,18 +95,14 @@ namespace RavenLinqpadDriver
 
                 _url = value;
 
-                RaisePropertyChanged(UrlPropertyName);
+                OnPropertyChanged(UrlPropertyName);
+                SaveCommand.OnCanExecuteChanged();
             }
         }
 
-        public const string DefaultDatabasePropertyName = "DefaultDatabase";
-        private string _defaultDatabase = null;
         public string DefaultDatabase
         {
-            get
-            {
-                return _defaultDatabase;
-            }
+            get { return _defaultDatabase; }
 
             set
             {
@@ -88,18 +112,13 @@ namespace RavenLinqpadDriver
                 }
                 _defaultDatabase = value;
 
-                RaisePropertyChanged(DefaultDatabasePropertyName);
+                OnPropertyChanged(DefaultDatabasePropertyName);
             }
         }
 
-        public const string ApiKeyPropertyName = "ApiKey";
-        private string _apiKey = null;
         public string ApiKey
         {
-            get
-            {
-                return _apiKey;
-            }
+            get { return _apiKey; }
             set
             {
                 if (_apiKey == value)
@@ -108,18 +127,13 @@ namespace RavenLinqpadDriver
                 }
                 _apiKey = value;
 
-                RaisePropertyChanged(ApiKeyPropertyName);
+                OnPropertyChanged(ApiKeyPropertyName);
             }
         }
 
-        public const string ResourceManagerIdPropertyName = "ResourceManagerId";
-        private Guid? _resourceManagerId = null;
         public Guid? ResourceManagerId
         {
-            get
-            {
-                return _resourceManagerId;
-            }
+            get { return _resourceManagerId; }
 
             set
             {
@@ -130,18 +144,13 @@ namespace RavenLinqpadDriver
 
                 _resourceManagerId = value;
 
-                RaisePropertyChanged(ResourceManagerIdPropertyName);
+                OnPropertyChanged(ResourceManagerIdPropertyName);
             }
         }
 
-        public const string UsernamePropertyName = "Username";
-        private string _username = null;
         public string Username
         {
-            get
-            {
-                return _username;
-            }
+            get { return _username; }
 
             set
             {
@@ -152,18 +161,13 @@ namespace RavenLinqpadDriver
 
                 _username = value;
 
-                RaisePropertyChanged(UsernamePropertyName);
+                OnPropertyChanged(UsernamePropertyName);
             }
         }
 
-        public const string PasswordPropertyName = "Password";
-        private string _password = null;
         public string Password
         {
-            get
-            {
-                return _password;
-            }
+            get { return _password; }
 
             set
             {
@@ -172,40 +176,15 @@ namespace RavenLinqpadDriver
 
                 _password = value;
 
-                RaisePropertyChanged(PasswordPropertyName);
+                OnPropertyChanged(PasswordPropertyName);
             }
         }
 
-        public const string AssemblyPathsPropertyName = "AssemblyPaths";
-        private string _assemblyPaths = null;
-        public string AssemblyPaths
-        {
-            get
-            {
-                return _assemblyPaths;
-            }
+        public BindingList<string> AssemblyPaths { get; set; }
 
-            set
-            {
-                if (_assemblyPaths == value)
-                {
-                    return;
-                }
-
-                _assemblyPaths = value;
-
-                RaisePropertyChanged(AssemblyPathsPropertyName);
-            }
-        }
-
-        public const string NamespacesPropertyName = "Namespaces";
-        private string _namespaces = null;
         public string Namespaces
         {
-            get
-            {
-                return _namespaces;
-            }
+            get { return _namespaces; }
 
             set
             {
@@ -216,21 +195,22 @@ namespace RavenLinqpadDriver
 
                 _namespaces = value;
 
-                RaisePropertyChanged(NamespacesPropertyName);
+                OnPropertyChanged(NamespacesPropertyName);
             }
         }
 
-        public RavenConnectionDialogViewModel()
-        {
-            SaveCommand = new RelayCommand(Save, CanSave);
-        }
+        [JsonIgnore]
+        public RelayCommand BrowseAssembliesCommand { get; set; }
+
+        [JsonIgnore]
+        public RelayCommand RemoveAssemblyCommand { get; set; }
 
         public void Save()
         {
             ValidateAssemblies();
 
-            string pw = Password;
-            if (!Password.IsNullOrWhitespace())
+            var pw = Password;
+            if (!string.IsNullOrWhiteSpace(Password))
                 Password = CxInfo.Encrypt(Password);
 
             var json = JsonConvert.SerializeObject(this);
@@ -241,14 +221,13 @@ namespace RavenLinqpadDriver
 
         public bool CanSave()
         {
-            return !Name.IsNullOrWhitespace()
-                && !Url.IsNullOrWhitespace();
+            return !string.IsNullOrWhiteSpace(Name)
+                   && !string.IsNullOrWhiteSpace(Url);
         }
 
         public bool ValidateAssemblies()
         {
-            var paths = GetAssemblyPaths();
-            foreach (var path in paths)
+            foreach (var path in AssemblyPaths)
             {
                 if (!File.Exists(path))
                     return false;
@@ -274,13 +253,6 @@ namespace RavenLinqpadDriver
             return true;
         }
 
-        public IEnumerable<string> GetAssemblyPaths()
-        {
-            return (AssemblyPaths ?? "")
-                .Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => x.Trim());
-        }
-
         public IEnumerable<string> GetNamespaces()
         {
             return (Namespaces ?? "")
@@ -290,20 +262,16 @@ namespace RavenLinqpadDriver
 
         public static RavenConnectionDialogViewModel Load(IConnectionInfo cxInfo)
         {
-            XElement xe = cxInfo.DriverData.Element(RavenConnectionInfoKey);
-            if (xe != null)
-            {
-                var json = xe.Value;
-                var rvnConn = JsonConvert.DeserializeObject<RavenConnectionDialogViewModel>(json);
-                rvnConn.CxInfo = cxInfo;
+            var xe = cxInfo.DriverData.Element(RavenConnectionInfoKey);
+            if (xe == null) return null;
+            var json = xe.Value;
+            var rvnConn = JsonConvert.DeserializeObject<RavenConnectionDialogViewModel>(json);
+            rvnConn.CxInfo = cxInfo;
 
-                if (!rvnConn.Password.IsNullOrWhitespace())
-                    rvnConn.Password = cxInfo.Decrypt(rvnConn.Password);
+            if (!string.IsNullOrWhiteSpace(rvnConn.Password))
+                rvnConn.Password = cxInfo.Decrypt(rvnConn.Password);
 
-                return rvnConn;
-            }
-
-            return null;
+            return rvnConn;
         }
 
         public DocumentStore CreateDocStore()
@@ -311,20 +279,20 @@ namespace RavenLinqpadDriver
             try
             {
                 var docStore = new DocumentStore
-                   {
-                       Url = Url
-                   };
+                {
+                    Url = Url
+                };
 
-                if (!DefaultDatabase.IsNullOrWhitespace())
+                if (!string.IsNullOrWhiteSpace(DefaultDatabase))
                     docStore.DefaultDatabase = DefaultDatabase.Trim();
 
                 if (ResourceManagerId.HasValue)
                     docStore.ResourceManagerId = ResourceManagerId.Value;
 
-                if (!Username.IsNullOrWhitespace())
+                if (!string.IsNullOrWhiteSpace(Username))
                     docStore.Credentials = new NetworkCredential(Username, Password);
 
-                if (!ApiKey.IsNullOrWhitespace())
+                if (!string.IsNullOrWhiteSpace(ApiKey))
                     docStore.ApiKey = ApiKey;
 
                 return docStore;
@@ -335,5 +303,37 @@ namespace RavenLinqpadDriver
             }
         }
 
+        public void BrowseAssemblies()
+        {
+            var win = new OpenFileDialog
+            {
+                DefaultExt = ".dll",
+                Multiselect = true,
+            };
+
+            if (win.ShowDialog() != true)
+                return;
+
+            var newPaths = win.FileNames.Except(AssemblyPaths, StringComparer.OrdinalIgnoreCase).ToArray();
+            foreach (var fileName in newPaths)
+                AssemblyPaths.Add(fileName);
+        }
+
+        public void RemoveAssembly()
+        {
+            AssemblyPaths.Remove(SelectedAssemblyPath);
+        }
+
+        public string SelectedAssemblyPath
+        {
+            get { return _selectedAssemblyPath; }
+            set
+            {
+                if (value == _selectedAssemblyPath) return;
+                _selectedAssemblyPath = value;
+                OnPropertyChanged("SelectedAssemblyPath");
+                RemoveAssemblyCommand.OnCanExecuteChanged();
+            }
+        }
     }
 }

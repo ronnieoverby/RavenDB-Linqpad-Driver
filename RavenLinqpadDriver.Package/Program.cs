@@ -45,7 +45,7 @@ namespace RavenLinqpadDriver.Package
                 releaseZip.AddFile(Path.Combine(commonPath, "RavenLinqpadDriver.Common.dll"), "Common");
 
                 // readme
-                releaseZip.AddFile(Path.Combine(basePath, "readme.txt"), "");
+                releaseZip.AddFile(Path.Combine(basePath, "readme.md"), "");
                 releaseZip.Save(releaseZipPath);
             }
 
