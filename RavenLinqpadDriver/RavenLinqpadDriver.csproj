@@ -101,13 +101,13 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\readme.md">
+      <Link>readme.md</Link>
+    </None>
     <None Include="packages.config" />
     <None Include="RavenLinqpadDriverStrongNameKey.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\readme.txt">
-      <Link>readme.txt</Link>
-    </Content>
     <Content Include="Connection.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
