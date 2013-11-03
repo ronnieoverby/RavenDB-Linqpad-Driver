@@ -307,6 +307,11 @@ Total Size: {8:n0}",
             return _docStore.DisableAggressiveCaching();
         }
 
+        public IDisposable SetRequestsTimeoutFor(TimeSpan timeout)
+        {
+            return _docStore.SetRequestsTimeoutFor(timeout);
+        }
+
         public void ExecuteIndex(AbstractIndexCreationTask indexCreationTask)
         {
             _docStore.ExecuteIndex(indexCreationTask);
