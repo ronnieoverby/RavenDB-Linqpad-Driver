@@ -1,0 +1,42 @@
+<h1>RavenDB LINQPad Driver</h1>
+
+<p>Releases are hosted on Github: <a href="https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/releases">https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/releases</a></p>
+
+<p>The latest release uses RavenDB client build 2874.</p>
+
+<p>Watch the video at <a href="http://youtu.be/XgsPvyk0bjM">http://youtu.be/XgsPvyk0bjM</a> for help getting started.</p>
+
+<hr />
+
+<p>To install:</p>
+
+<p>1) In Linqpad, click "Add connection".</p>
+
+<p>2) In the "Choose Data Context" dialog, press the "View more drivers..." button.</p>
+
+<p>3) In the "Choose a Driver" dialog, find the "RavenDB Driver" and click the "Download &amp; Enabled driver" link.</p>
+
+<p>4) Back in the "Choose Data Context" dialog, select "RavenDB Driver" and click the next button.</p>
+
+<p>5.) In the RavenDB connection dialog, supply your connection information.</p>
+
+<p>6) You're done. You can write some code against your Raven database now. For example:</p>
+
+<p><code>c#<br />
+// c# expression<br />
+from a in Query&lt;Album&gt;()<br />
+where a.Title.StartsWith("Classic")<br />
+select a<br />
+</code></p>
+
+<p>The RavenDB Linqpad Driver will create a DocumentStore for you to use to connect to RavenDB.<br />
+It uses the details that you supply in the connection properties window inside Linqpad.<br />
+If you need to fully control the creation of the IDocumentStore (for sharding, etc) you can do it:</p>
+
+<p>1) In your project, add a reference to RavenLinqpadDriver.Common.dll (can be found in /Common)</p>
+
+<p>2) Implement ICreateDocumentStore</p>
+
+<p>3) In Linqpad's RavenDB connection properties, reference your project's assembly.</p>
+
+<p>4) When you run queries under that Linqpad connection, you're custom IDocumentStore will be used.</p>

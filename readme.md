@@ -2,7 +2,7 @@
 
 Releases are hosted on Github: https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/releases
 
-The latest release uses RavenDB client build 2750.
+The latest release uses RavenDB client build 2874.
 
 Watch the video at http://youtu.be/XgsPvyk0bjM for help getting started.
 

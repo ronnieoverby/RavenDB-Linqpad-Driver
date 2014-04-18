@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenLinqpadDriver", "RavenLinqpadDriver\RavenLinqpadDriver.csproj", "{FAA16900-38B9-4891-86C3-F595DA1FA6F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C5E6FFE3-3C52-47CC-86DD-267AD73ED233}"
@@ -13,6 +15,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenLinqpadDriver.Package", "RavenLinqpadDriver.Package\RavenLinqpadDriver.Package.csproj", "{2CDA70CC-67CF-4C54-82EC-1F4ECDBE6588}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RavenLinqpadDriver.Common", "RavenLinqpadDriver.Common\RavenLinqpadDriver.Common.csproj", "{BE8D1EAB-CC89-4ED9-93B2-7EF535C865D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D35301AF-01F3-43E7-B97E-148CC74E0C41}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
