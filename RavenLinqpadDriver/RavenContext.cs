@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using Fasterflect;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Changes;
@@ -92,17 +91,17 @@ Total Size: {8:n0}",
             if (conn == null)
                 throw new ArgumentNullException("conn", "conn is null.");
 
-
-
             var assemblies = conn.AssemblyPaths.Select(Path.GetFileNameWithoutExtension).Select(Assembly.Load);
 
             var docStoreCreatorType = (from a in assemblies
                                        from t in a.TypesImplementing<ICreateDocumentStore>()
+                                       let hasDefaultCtor = t.GetConstructor(Type.EmptyTypes) != null
+                                       where !t.IsAbstract && hasDefaultCtor
                                        select t).FirstOrDefault();
 
             if (docStoreCreatorType != null)
             {
-                var docStoreCreator = (ICreateDocumentStore)ConstructorExtensions.CreateInstance(docStoreCreatorType);
+                var docStoreCreator = (ICreateDocumentStore)Activator.CreateInstance(docStoreCreatorType);
                 _docStore = docStoreCreator.CreateDocumentStore(new ConnectionInfo
                 {
                     Url = conn.Url,
@@ -142,6 +141,16 @@ Total Size: {8:n0}",
         public void Delete<T>(T entity)
         {
             _lazySession.Value.Delete(entity);
+        }
+        
+        public void Delete(string id)
+        {
+            _lazySession.Value.Delete(id);
+        }
+
+        public void Delete<T>(ValueType id)
+        {
+            _lazySession.Value.Delete<T>(id);
         }
 
         public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
@@ -387,6 +396,28 @@ Total Size: {8:n0}",
             get { return _docStore.WasDisposed; }
         }
 
+        public System.Threading.Tasks.Task ExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask)
+        {
+            return _docStore.ExecuteIndexAsync(indexCreationTask);
+        }
+
+        public System.Threading.Tasks.Task ExecuteTransformerAsync(AbstractTransformerCreationTask transformerCreationTask)
+        {
+            return _docStore.ExecuteTransformerAsync(transformerCreationTask);
+        }
+
+        public DocumentSessionListeners Listeners
+        {
+            get { return _docStore.Listeners; }
+        }
+
+        public void SetListeners(DocumentSessionListeners listeners)
+        {
+            _docStore.SetListeners(listeners);
+        }
+
         #endregion
+
+
     }
 }
