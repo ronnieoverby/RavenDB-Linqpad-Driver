@@ -41,3 +41,7 @@ If you need to fully control the creation of the IDocumentStore (for sharding, e
 3) In Linqpad's RavenDB connection properties, reference your project's assembly.
 
 4) When you run queries under that Linqpad connection, you're custom IDocumentStore will be used.
+
+### Thanks
+
+Special thanks to [JetBrains](http://www.jetbrains.com/) for supporting this project by donating a license of [ReSharper](http://www.jetbrains.com/resharper/)!
