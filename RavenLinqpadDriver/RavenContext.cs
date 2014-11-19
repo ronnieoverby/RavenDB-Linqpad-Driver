@@ -133,138 +133,135 @@ Total Size: {8:n0}",
         }
 
         #region IDocumentSession Members
-        public ISyncAdvancedSessionOperation Advanced
+
+	    public void Delete<T>(T entity)
+	    {
+		    _lazySession.Value.Delete<T>(entity);
+	    }
+
+	    public void Delete<T>(ValueType id)
+	    {
+			_lazySession.Value.Delete<T>(id);
+	    }
+
+	    public void Delete(string id)
+	    {
+			_lazySession.Value.Delete(id);
+	    }
+
+	    public T Load<T>(string id)
+	    {
+		    return _lazySession.Value.Load<T>(id);
+	    }
+
+	    public T[] Load<T>(IEnumerable<string> ids)
+	    {
+			return _lazySession.Value.Load<T>(ids);
+	    }
+
+	    public T Load<T>(ValueType id)
+	    {
+			return _lazySession.Value.Load<T>(id);
+	    }
+
+	    public T[] Load<T>(params ValueType[] ids)
+	    {
+			return _lazySession.Value.Load<T>(ids);
+	    }
+
+	    public T[] Load<T>(IEnumerable<ValueType> ids)
+	    {
+			return _lazySession.Value.Load<T>(ids);
+	    }
+
+	    public IRavenQueryable<T> Query<T>(string indexName, bool isMapReduce = false)
+	    {
+		    return _lazySession.Value.Query<T>(indexName, isMapReduce);
+	    }
+
+	    public IRavenQueryable<T> Query<T>()
+	    {
+			return _lazySession.Value.Query<T>();
+	    }
+
+	    public IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new()
+	    {
+			return _lazySession.Value.Query<T, TIndexCreator>();
+	    }
+
+	    public ILoaderWithInclude<object> Include(string path)
+	    {
+			return _lazySession.Value.Include(path);
+	    }
+
+	    public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
+	    {
+			return _lazySession.Value.Include<T>(path);
+	    }
+
+	    public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
+	    {
+			return _lazySession.Value.Include<T, TInclude>(path);
+	    }
+
+	    public TResult Load<TTransformer, TResult>(string id, Action<ILoadConfiguration> configure = null) where TTransformer : AbstractTransformerCreationTask, new()
+	    {
+			return _lazySession.Value.Load<TTransformer, TResult>(id, configure);
+	    }
+
+	    public TResult[] Load<TTransformer, TResult>(IEnumerable<string> ids, Action<ILoadConfiguration> configure = null) where TTransformer : AbstractTransformerCreationTask, new()
+	    {
+			return _lazySession.Value.Load<TTransformer, TResult>(ids, configure);
+	    }
+
+	    public TResult Load<TResult>(string id, string transformer, Action<ILoadConfiguration> configure)
+	    {
+			return _lazySession.Value.Load<TResult>(id, transformer, configure);
+	    }
+
+	    public TResult[] Load<TResult>(IEnumerable<string> ids, string transformer, Action<ILoadConfiguration> configure = null)
+	    {
+			return _lazySession.Value.Load<TResult>(ids, transformer, configure);
+	    }
+
+	    public TResult Load<TResult>(string id, Type transformerType, Action<ILoadConfiguration> configure = null)
+	    {
+			return _lazySession.Value.Load<TResult>(id, transformerType, configure);
+	    }
+
+	    public TResult[] Load<TResult>(IEnumerable<string> ids, Type transformerType, Action<ILoadConfiguration> configure = null)
+	    {
+			return _lazySession.Value.Load<TResult>(ids, transformerType, configure);
+	    }
+
+	    public void SaveChanges()
+	    {
+		    _lazySession.Value.SaveChanges();
+	    }
+
+	    public void Store(object entity, Etag etag)
+	    {
+			_lazySession.Value.Store(entity, etag);
+	    }
+
+	    public void Store(object entity, Etag etag, string id)
+	    {
+			_lazySession.Value.Store(entity, etag, id);
+	    }
+
+	    public void Store(dynamic entity)
+	    {
+			_lazySession.Value.Store(entity);
+	    }
+
+	    public void Store(dynamic entity, string id)
+	    {
+			_lazySession.Value.Store(entity, id);
+	    }
+
+	    public ISyncAdvancedSessionOperation Advanced
         {
             get { return _lazySession.Value.Advanced; }
-        }
-
-        public void Delete<T>(T entity)
-        {
-            _lazySession.Value.Delete(entity);
-        }
-        
-        public void Delete(string id)
-        {
-            _lazySession.Value.Delete(id);
-        }
-
-        public void Delete<T>(ValueType id)
-        {
-            _lazySession.Value.Delete<T>(id);
-        }
-
-        public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
-        {
-            return _lazySession.Value.Include(path);
-        }
-
-        public ILoaderWithInclude<object> Include(string path)
-        {
-            return _lazySession.Value.Include(path);
-        }
-
-        public T Load<T>(ValueType id)
-        {
-            return _lazySession.Value.Load<T>(id);
-        }
-
-        public T[] Load<T>(params ValueType[] ids)
-        {
-            return _lazySession.Value.Load<T>(ids);
-        }
-
-        public T[] Load<T>(IEnumerable<ValueType> ids)
-        {
-            return _lazySession.Value.Load<T>(ids);
-        }
-
-        // ReSharper disable MethodOverloadWithOptionalParameter
-        public IRavenQueryable<T> Query<T>(string indexName, bool isMapReduce = false)
-        // ReSharper restore MethodOverloadWithOptionalParameter
-        {
-            return _lazySession.Value.Query<T>(indexName, isMapReduce);
-        }
-
-        public T[] Load<T>(IEnumerable<string> ids)
-        {
-            return _lazySession.Value.Load<T>(ids);
-        }
-
-        public T[] Load<T>(params string[] ids)
-        {
-            return _lazySession.Value.Load<T>(ids);
-        }
-
-        public T Load<T>(string id)
-        {
-            return _lazySession.Value.Load<T>(id);
-        }
-
-        public IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new()
-        {
-            return _lazySession.Value.Query<T, TIndexCreator>();
-        }
-
-        public IRavenQueryable<T> Query<T>()
-        {
-            return _lazySession.Value.Query<T>();
-        }
-
-        public IRavenQueryable<T> Query<T>(string indexName)
-        {
-            return _lazySession.Value.Query<T>(indexName);
-        }
-
-        public TResult[] Load<TTransformer, TResult>(IEnumerable<string> ids, Action<ILoadConfiguration> configure) where TTransformer : AbstractTransformerCreationTask, new()
-        {
-            return _lazySession.Value.Load<TTransformer, TResult>(ids, configure);
-
-        }
-
-        public void SaveChanges()
-        {
-            _lazySession.Value.SaveChanges();
-        }
-
-        public void Store(object entity, Etag etag, string id)
-        {
-            _lazySession.Value.Store(entity, etag, id);
-        }
-
-        public void Store(object entity, Etag etag)
-        {
-            _lazySession.Value.Store(entity, etag);
-        }
-
-
-        public void Store(dynamic entity, string id)
-        {
-            _lazySession.Value.Store(entity, id);
-        }
-
-        public void Store(dynamic entity)
-        {
-            _lazySession.Value.Store(entity);
-        }
-
-        public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
-        {
-            return _lazySession.Value.Include<T, TInclude>(path);
-        }
-
-        public TResult Load<TTransformer, TResult>(string id) where TTransformer : AbstractTransformerCreationTask, new()
-        {
-            return _lazySession.Value.Load<TTransformer, TResult>(id);
-        }
-
-        public TResult Load<TTransformer, TResult>(string id, Action<ILoadConfiguration> configure) where TTransformer : AbstractTransformerCreationTask, new()
-        {
-            return _lazySession.Value.Load<TTransformer, TResult>(id, configure);
-        }
-
-        public TResult[] Load<TTransformer, TResult>(params string[] ids) where TTransformer : AbstractTransformerCreationTask, new()
-        {
-            return _lazySession.Value.Load<TTransformer, TResult>(ids);
         }
 
         #endregion
@@ -341,7 +338,15 @@ Total Size: {8:n0}",
             return _docStore.BulkInsert(database, options);
         }
 
-        public string Identifier
+	    public bool HasJsonRequestFactory
+	    {
+		    get
+		    {
+			    return _docStore.HasJsonRequestFactory;
+		    }
+	    }
+
+	    public string Identifier
         {
             get
             {
@@ -379,7 +384,12 @@ Total Size: {8:n0}",
             return _docStore.OpenSession();
         }
 
-        public System.Collections.Specialized.NameValueCollection SharedOperationsHeaders
+	    public ProfilingInformation GetProfilingInformationFor(Guid id)
+	    {
+			return _docStore.GetProfilingInformationFor(id);
+	    }
+
+	    public System.Collections.Specialized.NameValueCollection SharedOperationsHeaders
         {
             get { return _docStore.SharedOperationsHeaders; }
         }
@@ -416,7 +426,12 @@ Total Size: {8:n0}",
             _docStore.SetListeners(listeners);
         }
 
-        #endregion
+	    public void InitializeProfiling()
+	    {
+		    _docStore.InitializeProfiling();
+	    }
+
+	    #endregion
 
 
     }
