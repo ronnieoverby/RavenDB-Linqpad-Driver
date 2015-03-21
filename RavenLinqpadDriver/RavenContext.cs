@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Changes;
+using Raven.Client.Connection;
+using Raven.Client.Connection.Async;
 using Raven.Client.Connection.Profiling;
+using System.Reflection;
+using System.Net;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
 using Raven.Client.Linq;
-using System.Reflection;
-using System.Net;
 using Raven.Client.Shard;
 using RavenLinqpadDriver.Common;
 
@@ -20,10 +24,8 @@ namespace RavenLinqpadDriver
 {
     public class RavenContext : IDocumentSession, IDocumentStore
     {
-        // ReSharper disable InconsistentNaming
-        private IDocumentStore _docStore;
+        private readonly IDocumentStore _docStore;
         private readonly Lazy<IDocumentSession> _lazySession;
-        // ReSharper restore InconsistentNaming
 
         internal TextWriter LogWriter { get; set; }
 
@@ -31,7 +33,7 @@ namespace RavenLinqpadDriver
         {
             if (connInfo == null) throw new ArgumentNullException("connInfo");
 
-            InitDocStore(connInfo);
+            _docStore = CreateDocStore(connInfo).Initialize();
             _lazySession = new Lazy<IDocumentSession>(_docStore.OpenSession);
             SetupLogWriting();
         }
@@ -86,7 +88,7 @@ Total Size: {8:n0}",
             LogWriter.WriteLine(entry.ToString());
         }
 
-        private void InitDocStore(RavenConnectionDialogViewModel conn)
+        private static IDocumentStore CreateDocStore(RavenConnectionDialogViewModel conn)
         {
             if (conn == null)
                 throw new ArgumentNullException("conn", "conn is null.");
@@ -94,33 +96,30 @@ Total Size: {8:n0}",
             var assemblies = conn.AssemblyPaths.Select(Path.GetFileNameWithoutExtension).Select(Assembly.Load);
 
             var docStoreCreatorType = (from a in assemblies
-                                       from t in a.TypesImplementing<ICreateDocumentStore>()
-                                       let hasDefaultCtor = t.GetConstructor(Type.EmptyTypes) != null
-                                       where !t.IsAbstract && hasDefaultCtor
-                                       select t).FirstOrDefault();
+                from t in a.TypesImplementing<ICreateDocumentStore>()
+                let hasDefaultCtor = t.GetConstructor(Type.EmptyTypes) != null
+                where !t.IsAbstract && hasDefaultCtor
+                select t).FirstOrDefault();
 
-            if (docStoreCreatorType != null)
+            if (docStoreCreatorType == null) 
+                return conn.CreateDocStore();
+
+            var docStoreCreator = (ICreateDocumentStore) Activator.CreateInstance(docStoreCreatorType);
+
+            var connectionInfo = new ConnectionInfo
             {
-                var docStoreCreator = (ICreateDocumentStore)Activator.CreateInstance(docStoreCreatorType);
-                _docStore = docStoreCreator.CreateDocumentStore(new ConnectionInfo
+                Url = conn.Url,
+                DefaultDatabase = conn.DefaultDatabase,
+                Credentials = new NetworkCredential
                 {
-                    Url = conn.Url,
-                    DefaultDatabase = conn.DefaultDatabase,
-                    Credentials = new NetworkCredential
-                    {
-                        UserName = conn.Username,
-                        Password = conn.Password
-                    },
-                    ResourceManagerId = conn.ResourceManagerId,
-                    ApiKey = conn.ApiKey
-                });
-            }
-            else
-            {
-                _docStore = conn.CreateDocStore();
-            }
+                    UserName = conn.Username,
+                    Password = conn.Password
+                },
+                ResourceManagerId = conn.ResourceManagerId,
+                ApiKey = conn.ApiKey
+            };
 
-            _docStore.Initialize();
+            return docStoreCreator.CreateDocumentStore(connectionInfo);
         }
 
         public void Dispose()
@@ -132,35 +131,207 @@ Total Size: {8:n0}",
                 _docStore.Dispose();
         }
 
-        #region IDocumentSession Members
-        public ISyncAdvancedSessionOperation Advanced
+
+        public bool WasDisposed
         {
-            get { return _lazySession.Value.Advanced; }
+            get { return _docStore.WasDisposed; }
+        }
+
+        public event EventHandler AfterDispose;
+        public IDatabaseChanges Changes(string database = null)
+        {
+            return _docStore.Changes(database);
+        }
+
+        public IDisposable AggressivelyCacheFor(TimeSpan cacheDuration)
+        {
+            return _docStore.AggressivelyCacheFor(cacheDuration);
+        }
+
+        public IDisposable AggressivelyCache()
+        {
+            return _docStore.AggressivelyCache();
+        }
+
+        public IDisposable DisableAggressiveCaching()
+        {
+            return _docStore.DisableAggressiveCaching();
+        }
+
+        public IDisposable SetRequestsTimeoutFor(TimeSpan timeout)
+        {
+            return _docStore.SetRequestsTimeoutFor(timeout);
+        }
+
+        public IDocumentStore Initialize()
+        {
+            return _docStore.Initialize();
+        }
+
+        public IAsyncDocumentSession OpenAsyncSession()
+        {
+            return _docStore.OpenAsyncSession();
+        }
+
+        public IAsyncDocumentSession OpenAsyncSession(string database)
+        {
+            return _docStore.OpenAsyncSession(database);
+        }
+
+        public IDocumentSession OpenSession()
+        {
+            return _docStore.OpenSession();
+        }
+
+        public IDocumentSession OpenSession(string database)
+        {
+            return _docStore.OpenSession(database);
+        }
+
+        public IDocumentSession OpenSession(OpenSessionOptions sessionOptions)
+        {
+            return _docStore.OpenSession(sessionOptions);
+        }
+
+        public void ExecuteIndex(AbstractIndexCreationTask indexCreationTask)
+        {
+            _docStore.ExecuteIndex(indexCreationTask);
+        }
+
+        public Task ExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask)
+        {
+            return _docStore.ExecuteIndexAsync(indexCreationTask);
+        }
+
+        public void ExecuteTransformer(AbstractTransformerCreationTask transformerCreationTask)
+        {
+            _docStore.ExecuteTransformer(transformerCreationTask);
+        }
+
+        public Task ExecuteTransformerAsync(AbstractTransformerCreationTask transformerCreationTask)
+        {
+            return _docStore.ExecuteTransformerAsync(transformerCreationTask);
+        }
+
+        public Etag GetLastWrittenEtag()
+        {
+            return _docStore.GetLastWrittenEtag();
+        }
+
+        public BulkInsertOperation BulkInsert(string database = null, BulkInsertOptions options = null)
+        {
+            return _docStore.BulkInsert(database, options);
+        }
+
+        public void SetListeners(DocumentSessionListeners listeners)
+        {
+            _docStore.SetListeners(listeners);
+        }
+
+        public void InitializeProfiling()
+        {
+            _docStore.InitializeProfiling();
+        }
+
+        public ProfilingInformation GetProfilingInformationFor(Guid id)
+        {
+            return _docStore.GetProfilingInformationFor(id);
+        }
+
+        public NameValueCollection SharedOperationsHeaders
+        {
+            get { return _docStore.SharedOperationsHeaders; }
+        }
+
+        public HttpJsonRequestFactory JsonRequestFactory
+        {
+            get { return _docStore.JsonRequestFactory; }
+        }
+
+        public bool HasJsonRequestFactory
+        {
+            get { return _docStore.HasJsonRequestFactory; }
+        }
+
+        public string Identifier
+        {
+            get { return _docStore.Identifier; }
+            set { _docStore.Identifier = value; }
+        }
+
+        public IAsyncDatabaseCommands AsyncDatabaseCommands
+        {
+            get { return _docStore.AsyncDatabaseCommands; }
+        }
+
+        public IDatabaseCommands DatabaseCommands
+        {
+            get { return _docStore.DatabaseCommands; }
+        }
+
+        public DocumentConvention Conventions
+        {
+            get { return _docStore.Conventions; }
+        }
+
+        public string Url
+        {
+            get { return _docStore.Url; }
+        }
+
+        public IAsyncReliableSubscriptions AsyncSubscriptions
+        {
+            get { return _docStore.AsyncSubscriptions; }
+        }
+
+        public IReliableSubscriptions Subscriptions
+        {
+            get { return _docStore.Subscriptions; }
+        }
+
+        public DocumentSessionListeners Listeners
+        {
+            get { return _docStore.Listeners; }
         }
 
         public void Delete<T>(T entity)
         {
             _lazySession.Value.Delete(entity);
         }
-        
+
+        public void Delete<T>(ValueType id)
+        {
+            _lazySession.Value.Delete<T>(id);
+        }
+
         public void Delete(string id)
         {
             _lazySession.Value.Delete(id);
         }
 
-        /*public void Delete<T>(ValueType id)
+        public ILoaderWithInclude<object> Include(string path)
         {
-            _lazySession.Value.Delete<T>(id);
-        }*/
+            return _lazySession.Value.Include(path);
+        }
 
         public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
         {
             return _lazySession.Value.Include(path);
         }
 
-        public ILoaderWithInclude<object> Include(string path)
+        public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
         {
-            return _lazySession.Value.Include(path);
+            return _lazySession.Value.Include<T, TInclude>(path);
+        }
+
+        public T Load<T>(string id)
+        {
+            return _lazySession.Value.Load<T>(id);
+        }
+
+        public T[] Load<T>(IEnumerable<string> ids)
+        {
+            return _lazySession.Value.Load<T>(ids);
         }
 
         public T Load<T>(ValueType id)
@@ -178,31 +349,39 @@ Total Size: {8:n0}",
             return _lazySession.Value.Load<T>(ids);
         }
 
-        // ReSharper disable MethodOverloadWithOptionalParameter
+        public TResult Load<TTransformer, TResult>(string id, Action<ILoadConfiguration> configure = null) where TTransformer : AbstractTransformerCreationTask, new()
+        {
+            return _lazySession.Value.Load<TTransformer, TResult>(id, configure);
+        }
+
+        public TResult[] Load<TTransformer, TResult>(IEnumerable<string> ids, Action<ILoadConfiguration> configure = null) where TTransformer : AbstractTransformerCreationTask, new()
+        {
+            return _lazySession.Value.Load<TTransformer, TResult>(ids, configure);
+        }
+
+        public TResult Load<TResult>(string id, string transformer, Action<ILoadConfiguration> configure)
+        {
+            return _lazySession.Value.Load<TResult>(id, transformer, configure);
+        }
+
+        public TResult[] Load<TResult>(IEnumerable<string> ids, string transformer, Action<ILoadConfiguration> configure = null)
+        {
+            return _lazySession.Value.Load<TResult>(ids, transformer, configure);
+        }
+
+        public TResult Load<TResult>(string id, Type transformerType, Action<ILoadConfiguration> configure = null)
+        {
+            return _lazySession.Value.Load<TResult>(id, transformerType, configure);
+        }
+
+        public TResult[] Load<TResult>(IEnumerable<string> ids, Type transformerType, Action<ILoadConfiguration> configure = null)
+        {
+            return _lazySession.Value.Load<TResult>(ids, transformerType, configure);
+        }
+
         public IRavenQueryable<T> Query<T>(string indexName, bool isMapReduce = false)
-        // ReSharper restore MethodOverloadWithOptionalParameter
         {
             return _lazySession.Value.Query<T>(indexName, isMapReduce);
-        }
-
-        public T[] Load<T>(IEnumerable<string> ids)
-        {
-            return _lazySession.Value.Load<T>(ids);
-        }
-
-        public T[] Load<T>(params string[] ids)
-        {
-            return _lazySession.Value.Load<T>(ids);
-        }
-
-        public T Load<T>(string id)
-        {
-            return _lazySession.Value.Load<T>(id);
-        }
-
-        public IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new()
-        {
-            return _lazySession.Value.Query<T, TIndexCreator>();
         }
 
         public IRavenQueryable<T> Query<T>()
@@ -210,15 +389,9 @@ Total Size: {8:n0}",
             return _lazySession.Value.Query<T>();
         }
 
-        public IRavenQueryable<T> Query<T>(string indexName)
+        public IRavenQueryable<T> Query<T, TIndexCreator>() where TIndexCreator : AbstractIndexCreationTask, new()
         {
-            return _lazySession.Value.Query<T>(indexName);
-        }
-
-        public TResult[] Load<TTransformer, TResult>(IEnumerable<string> ids, Action<ILoadConfiguration> configure) where TTransformer : AbstractTransformerCreationTask, new()
-        {
-            return _lazySession.Value.Load<TTransformer, TResult>(ids, configure);
-
+            return _lazySession.Value.Query<T, TIndexCreator>();
         }
 
         public void SaveChanges()
@@ -226,199 +399,29 @@ Total Size: {8:n0}",
             _lazySession.Value.SaveChanges();
         }
 
-        public void Store(object entity, Etag etag, string id)
-        {
-            _lazySession.Value.Store(entity, etag, id);
-        }
-
         public void Store(object entity, Etag etag)
         {
             _lazySession.Value.Store(entity, etag);
         }
 
-
-        public void Store(dynamic entity, string id)
+        public void Store(object entity, Etag etag, string id)
         {
-            _lazySession.Value.Store(entity, id);
+            _lazySession.Value.Store(entity, etag, id);
         }
 
-        public void Store(dynamic entity)
+        public void Store(object entity)
         {
             _lazySession.Value.Store(entity);
         }
 
-        public ILoaderWithInclude<T> Include<T, TInclude>(Expression<Func<T, object>> path)
+        public void Store(object entity, string id)
         {
-            return _lazySession.Value.Include<T, TInclude>(path);
+            _lazySession.Value.Store(entity, id);
         }
 
-        public TResult Load<TTransformer, TResult>(string id) where TTransformer : AbstractTransformerCreationTask, new()
+        public ISyncAdvancedSessionOperation Advanced
         {
-            return _lazySession.Value.Load<TTransformer, TResult>(id);
+            get { return _lazySession.Value.Advanced; }
         }
-
-        public TResult Load<TTransformer, TResult>(string id, Action<ILoadConfiguration> configure) where TTransformer : AbstractTransformerCreationTask, new()
-        {
-            return _lazySession.Value.Load<TTransformer, TResult>(id, configure);
-        }
-
-        public TResult[] Load<TTransformer, TResult>(params string[] ids) where TTransformer : AbstractTransformerCreationTask, new()
-        {
-            return _lazySession.Value.Load<TTransformer, TResult>(ids);
-        }
-
-        #endregion
-
-        #region IDocumentStore Members
-
-        public Raven.Client.Connection.Async.IAsyncDatabaseCommands AsyncDatabaseCommands
-        {
-            get { return _docStore.AsyncDatabaseCommands; }
-        }
-
-        public IAsyncDocumentSession OpenAsyncSession(string database)
-        {
-            return _docStore.OpenAsyncSession(database);
-        }
-
-        public IAsyncDocumentSession OpenAsyncSession()
-        {
-            return _docStore.OpenAsyncSession();
-        }
-
-        public IDatabaseChanges Changes(string database = null)
-        {
-            return _docStore.Changes(database);
-        }
-
-        public IDisposable AggressivelyCacheFor(TimeSpan cahceDuration)
-        {
-            return _docStore.AggressivelyCacheFor(cahceDuration);
-        }
-
-        public IDisposable AggressivelyCache()
-        {
-            return _docStore.AggressivelyCache();
-        }
-
-        public DocumentConvention Conventions
-        {
-            get { return _docStore.Conventions; }
-        }
-
-        public Raven.Client.Connection.IDatabaseCommands DatabaseCommands
-        {
-            get { return _docStore.DatabaseCommands; }
-        }
-
-        public IDisposable DisableAggressiveCaching()
-        {
-            return _docStore.DisableAggressiveCaching();
-        }
-
-        public IDisposable SetRequestsTimeoutFor(TimeSpan timeout)
-        {
-            return _docStore.SetRequestsTimeoutFor(timeout);
-        }
-
-        public void ExecuteIndex(AbstractIndexCreationTask indexCreationTask)
-        {
-            _docStore.ExecuteIndex(indexCreationTask);
-        }
-
-        public void ExecuteTransformer(AbstractTransformerCreationTask transformerCreationTask)
-        {
-            _docStore.ExecuteTransformer(transformerCreationTask);
-        }
-
-        public Etag GetLastWrittenEtag()
-        {
-            return _docStore.GetLastWrittenEtag();
-        }
-
-        public BulkInsertOperation BulkInsert(string database = null, BulkInsertOptions options = null)
-        {
-            return _docStore.BulkInsert(database, options);
-        }
-
-        public string Identifier
-        {
-            get
-            {
-                return _docStore.Identifier;
-            }
-            set
-            {
-                _docStore.Identifier = value;
-            }
-        }
-
-        public IDocumentStore Initialize()
-        {
-            // already initialized
-            return this;
-        }
-
-        public Raven.Client.Connection.HttpJsonRequestFactory JsonRequestFactory
-        {
-            get { return _docStore.JsonRequestFactory; }
-        }
-
-        public IDocumentSession OpenSession(OpenSessionOptions sessionOptions)
-        {
-            return _docStore.OpenSession(sessionOptions);
-        }
-
-        public IDocumentSession OpenSession(string database)
-        {
-            return _docStore.OpenSession(database);
-        }
-
-        public IDocumentSession OpenSession()
-        {
-            return _docStore.OpenSession();
-        }
-
-        public System.Collections.Specialized.NameValueCollection SharedOperationsHeaders
-        {
-            get { return _docStore.SharedOperationsHeaders; }
-        }
-
-        public string Url
-        {
-            get { return _docStore.Url; }
-        }
-
-        public event EventHandler AfterDispose;
-
-        public bool WasDisposed
-        {
-            get { return _docStore.WasDisposed; }
-        }
-
-      /*  public System.Threading.Tasks.Task ExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask)
-        {
-            
-            return _docStore.ExecuteIndexAsync(indexCreationTask);
-        }
-
-        public System.Threading.Tasks.Task ExecuteTransformerAsync(AbstractTransformerCreationTask transformerCreationTask)
-        {
-            return _docStore.ExecuteTransformerAsync(transformerCreationTask);
-        }
-
-        public DocumentSessionListeners Listeners
-        {
-            get { return _docStore.Listeners; }
-        }
-
-        public void SetListeners(DocumentSessionListeners listeners)
-        {
-            _docStore.SetListeners(listeners);
-        }*/
-
-        #endregion
-
-
     }
 }
