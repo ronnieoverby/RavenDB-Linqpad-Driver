@@ -148,10 +148,10 @@ Total Size: {8:n0}",
             _lazySession.Value.Delete(id);
         }
 
-        public void Delete<T>(ValueType id)
+        /*public void Delete<T>(ValueType id)
         {
             _lazySession.Value.Delete<T>(id);
-        }
+        }*/
 
         public ILoaderWithInclude<T> Include<T>(Expression<Func<T, object>> path)
         {
@@ -396,8 +396,9 @@ Total Size: {8:n0}",
             get { return _docStore.WasDisposed; }
         }
 
-        public System.Threading.Tasks.Task ExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask)
+      /*  public System.Threading.Tasks.Task ExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask)
         {
+            
             return _docStore.ExecuteIndexAsync(indexCreationTask);
         }
 
@@ -414,7 +415,7 @@ Total Size: {8:n0}",
         public void SetListeners(DocumentSessionListeners listeners)
         {
             _docStore.SetListeners(listeners);
-        }
+        }*/
 
         #endregion
 
