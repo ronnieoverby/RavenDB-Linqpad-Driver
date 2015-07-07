@@ -96,15 +96,15 @@ Total Size: {8:n0}",
             var assemblies = conn.AssemblyPaths.Select(Path.GetFileNameWithoutExtension).Select(Assembly.Load);
 
             var docStoreCreatorType = (from a in assemblies
-                from t in a.TypesImplementing<ICreateDocumentStore>()
-                let hasDefaultCtor = t.GetConstructor(Type.EmptyTypes) != null
-                where !t.IsAbstract && hasDefaultCtor
-                select t).FirstOrDefault();
+                                       from t in a.TypesImplementing<ICreateDocumentStore>()
+                                       let hasDefaultCtor = t.GetConstructor(Type.EmptyTypes) != null
+                                       where !t.IsAbstract && hasDefaultCtor
+                                       select t).FirstOrDefault();
 
-            if (docStoreCreatorType == null) 
+            if (docStoreCreatorType == null)
                 return conn.CreateDocStore();
 
-            var docStoreCreator = (ICreateDocumentStore) Activator.CreateInstance(docStoreCreatorType);
+            var docStoreCreator = (ICreateDocumentStore)Activator.CreateInstance(docStoreCreatorType);
 
             var connectionInfo = new ConnectionInfo
             {
@@ -177,6 +177,12 @@ Total Size: {8:n0}",
         {
             return _docStore.OpenAsyncSession(database);
         }
+
+        public IAsyncDocumentSession OpenAsyncSession(OpenSessionOptions sessionOptions)
+        {
+            return _docStore.OpenAsyncSession(sessionOptions);
+        }
+
 
         public IDocumentSession OpenSession()
         {
@@ -422,6 +428,16 @@ Total Size: {8:n0}",
         public ISyncAdvancedSessionOperation Advanced
         {
             get { return _lazySession.Value.Advanced; }
+        }
+
+        public void SideBySideExecuteIndex(AbstractIndexCreationTask indexCreationTask, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
+        {
+            _docStore.SideBySideExecuteIndex(indexCreationTask, minimumEtagBeforeReplace, replaceTimeUtc);
+        }
+
+        public Task SideBySideExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
+        {
+            return _docStore.SideBySideExecuteIndexAsync(indexCreationTask, minimumEtagBeforeReplace, replaceTimeUtc);
         }
     }
 }
