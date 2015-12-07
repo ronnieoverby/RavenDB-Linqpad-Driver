@@ -439,5 +439,25 @@ Total Size: {8:n0}",
         {
             return _docStore.SideBySideExecuteIndexAsync(indexCreationTask, minimumEtagBeforeReplace, replaceTimeUtc);
         }
+
+        public void SideBySideExecuteIndexes(List<AbstractIndexCreationTask> indexCreationTasks, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = default(DateTime?))
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SideBySideExecuteIndexesAsync(List<AbstractIndexCreationTask> indexCreationTasks, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = default(DateTime?))
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ExecuteIndexes(List<AbstractIndexCreationTask> indexCreationTasks)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ExecuteIndexesAsync(List<AbstractIndexCreationTask> indexCreationTasks)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
