@@ -12,9 +12,11 @@ using LINQPad.Extensibility.DataContext;
 using Microsoft.Win32;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace RavenLinqpadDriver
 {
+    [DataContract]
     public class RavenConnectionDialogViewModel : ViewModelBase
     {
         public const string RavenConnectionInfoKey = "RavenConnectionInfo";
@@ -56,13 +58,12 @@ namespace RavenLinqpadDriver
             return !string.IsNullOrWhiteSpace(SelectedAssemblyPath);
         }
 
-        [JsonIgnore]
         public IConnectionInfo CxInfo { get; set; }
 
-        [JsonIgnore]
         public RelayCommand SaveCommand { get; set; }
 
         [Required]
+        [DataMember]
         public string Name
         {
             get { return _name; }
@@ -82,6 +83,7 @@ namespace RavenLinqpadDriver
         }
 
         [Required]
+        [DataMember]
         public string Url
         {
             get { return _url; }
@@ -100,6 +102,7 @@ namespace RavenLinqpadDriver
             }
         }
 
+        [DataMember]
         public string DefaultDatabase
         {
             get { return _defaultDatabase; }
@@ -116,6 +119,7 @@ namespace RavenLinqpadDriver
             }
         }
 
+        [DataMember]
         public string ApiKey
         {
             get { return _apiKey; }
@@ -131,6 +135,7 @@ namespace RavenLinqpadDriver
             }
         }
 
+        [DataMember]
         public Guid? ResourceManagerId
         {
             get { return _resourceManagerId; }
@@ -148,6 +153,7 @@ namespace RavenLinqpadDriver
             }
         }
 
+        [DataMember]
         public string Username
         {
             get { return _username; }
@@ -165,6 +171,7 @@ namespace RavenLinqpadDriver
             }
         }
 
+        [DataMember]
         public string Password
         {
             get { return _password; }
@@ -180,8 +187,10 @@ namespace RavenLinqpadDriver
             }
         }
 
+        [DataMember]
         public BindingList<string> AssemblyPaths { get; set; }
 
+        [DataMember]
         public string Namespaces
         {
             get { return _namespaces; }
@@ -199,10 +208,8 @@ namespace RavenLinqpadDriver
             }
         }
 
-        [JsonIgnore]
         public RelayCommand BrowseAssembliesCommand { get; set; }
 
-        [JsonIgnore]
         public RelayCommand RemoveAssemblyCommand { get; set; }
 
         public void Save()
@@ -213,8 +220,22 @@ namespace RavenLinqpadDriver
             if (!string.IsNullOrWhiteSpace(Password))
                 Password = CxInfo.Encrypt(Password);
 
-            var json = JsonConvert.SerializeObject(this);
-            CxInfo.DriverData.SetElementValue(RavenConnectionInfoKey, json);
+            try
+            {
+                var json = JsonConvert.SerializeObject(this);
+                CxInfo.DriverData.SetElementValue(RavenConnectionInfoKey, json);
+            }
+            catch (Exception ex)
+            {
+                // mvvm.... screw it again
+                MessageBox.Show(string.Format(
+                    "Exception serializing JSON: {0}{1}",
+                    Environment.NewLine,
+                    ex.Message));
+
+                // we don't want linqpad to continue if this happens so throw the exception
+                throw;
+            }
 
             Password = pw;
         }
