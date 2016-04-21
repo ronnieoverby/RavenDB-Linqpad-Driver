@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:RavenLinqpadDriver"
-             mc:Ignorable="d" Title="RavenDB Connection" Height="508.328" Width="616">
+             mc:Ignorable="d" Title="RavenDB Connection" Height="540" Width="616">
 
     <Window.Resources>
         <local:GuidValueConverter x:Key="GuidConverter"/>
