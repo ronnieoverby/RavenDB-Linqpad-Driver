@@ -209,6 +209,36 @@ Total Size: {8:n0}",
             return _docStore.ExecuteIndexAsync(indexCreationTask);
         }
 
+        public void ExecuteIndexes(List<AbstractIndexCreationTask> indexCreationTasks)
+        {
+            _docStore.ExecuteIndexes(indexCreationTasks);
+        }
+
+        public Task ExecuteIndexesAsync(List<AbstractIndexCreationTask> indexCreationTasks)
+        {
+            return _docStore.ExecuteIndexesAsync(indexCreationTasks);
+        }
+
+        public void SideBySideExecuteIndex(AbstractIndexCreationTask indexCreationTask, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
+        {
+            _docStore.SideBySideExecuteIndex(indexCreationTask, minimumEtagBeforeReplace, replaceTimeUtc);
+        }
+
+        public Task SideBySideExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
+        {
+            return _docStore.SideBySideExecuteIndexAsync(indexCreationTask, minimumEtagBeforeReplace, replaceTimeUtc);
+        }
+
+        public void SideBySideExecuteIndexes(List<AbstractIndexCreationTask> indexCreationTasks, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
+        {
+            _docStore.SideBySideExecuteIndexes(indexCreationTasks, minimumEtagBeforeReplace, replaceTimeUtc);
+        }
+
+        public Task SideBySideExecuteIndexesAsync(List<AbstractIndexCreationTask> indexCreationTasks, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
+        {
+            return _docStore.SideBySideExecuteIndexesAsync(indexCreationTasks, minimumEtagBeforeReplace, replaceTimeUtc);
+        }
+
         public void ExecuteTransformer(AbstractTransformerCreationTask transformerCreationTask)
         {
             _docStore.ExecuteTransformer(transformerCreationTask);
@@ -428,16 +458,6 @@ Total Size: {8:n0}",
         public ISyncAdvancedSessionOperation Advanced
         {
             get { return _lazySession.Value.Advanced; }
-        }
-
-        public void SideBySideExecuteIndex(AbstractIndexCreationTask indexCreationTask, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
-        {
-            _docStore.SideBySideExecuteIndex(indexCreationTask, minimumEtagBeforeReplace, replaceTimeUtc);
-        }
-
-        public Task SideBySideExecuteIndexAsync(AbstractIndexCreationTask indexCreationTask, Etag minimumEtagBeforeReplace = null, DateTime? replaceTimeUtc = null)
-        {
-            return _docStore.SideBySideExecuteIndexAsync(indexCreationTask, minimumEtagBeforeReplace, replaceTimeUtc);
         }
     }
 }
