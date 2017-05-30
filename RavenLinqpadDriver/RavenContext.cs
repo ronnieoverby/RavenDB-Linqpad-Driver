@@ -63,14 +63,14 @@ namespace RavenLinqpadDriver
             if (LogWriter == null) return;
 
             var entry = new StringBuilder().AppendFormat(@"
-{0} - {1}
-Url: {2}
-Duration: {3} milliseconds
-Method: {4}
-Posted Data: {5}
-Http Result: {6}
-Result Data: {7}
-Total Size: {8:n0}",
+                {0} - {1}
+                Url: {2}
+                Duration: {3} milliseconds
+                Method: {4}
+                Posted Data: {5}
+                Http Result: {6}
+                Result Data: {7}
+                Total Size: {8:n0}",
                 e.At,
                 e.Status,
                 e.Url,
