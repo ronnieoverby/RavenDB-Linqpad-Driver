@@ -29,7 +29,7 @@ namespace RavenLinqpadDriver.Package
             using (var releaseZip = new ZipFile())
             using (var lpx40 = new ZipFile())
             {
-                var releaseZipPath = Path.Combine(releaseDir, string.Format("RavenLinqpadDriver {0}.zip", version));
+                var releaseZipPath = Path.Combine(releaseDir, $"RavenLinqpadDriver {version}.zip");
 
                 // 40 driver lpx file
                 lpx40.AddFiles(GetFiles(driverPath), "");
