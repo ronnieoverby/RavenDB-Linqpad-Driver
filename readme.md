@@ -1,4 +1,4 @@
-#RavenDB LINQPad Driver
+# RavenDB LINQPad Driver
 
 Releases are hosted on Github: https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/releases
 
