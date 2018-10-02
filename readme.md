@@ -18,7 +18,7 @@ To install:
 
 4) Back in the "Choose Data Context" dialog, select "RavenDB Driver" and click the next button.
 
-5.) In the RavenDB connection dialog, supply your connection information.
+5) In the RavenDB connection dialog, supply your connection information.
 
 6) You're done. You can write some code against your Raven database now. For example:
 
