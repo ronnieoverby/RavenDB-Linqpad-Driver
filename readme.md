@@ -1,5 +1,7 @@
 # RavenDB LINQPad Driver
 
+*Not yet compatible with 4.x+ Servers*
+
 Releases are hosted on Github: https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/releases
 
 The latest release uses RavenDB client build 3.5.4.
