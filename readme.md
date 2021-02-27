@@ -1,6 +1,6 @@
 # RavenDB LINQPad Driver
 
-*Not yet compatible with 4.x+ Servers*
+*Not yet compatible with 4.x+ Servers - See https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/tree/linqpad_6_example_connection_loading for a workaround.* 
 
 Releases are hosted on Github: https://github.com/ronnieoverby/RavenDB-Linqpad-Driver/releases
 
